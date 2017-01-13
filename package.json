@@ -1,8 +1,8 @@
 {
     "name": "robotframework",
-    "displayName": "robot language",
-    "description": "robot language support for vscode",
-    "version": "0.1.4",
+    "displayName": "robot framework language",
+    "description": "robot framework language support for vscode",
+    "version": "0.1.6",
     "publisher": "keith",
     "engines": {
         "vscode": "^1.5.0"

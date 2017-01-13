@@ -1,0 +1,25 @@
+*** Test Cases ***
+This is the first test case
+     keyword one
+     keyword two
+     keyword three
+     keyword five
+
+*** Keywords ***
+keyword one
+     library function one
+
+keyword two
+     library function two
+
+keyword three
+     library function three
+
+keyword four
+     library function four
+     
+*** Settings ***
+library    test.py
+library    testWithClass.TestLibraryClass
+library    anotherTest
+resource    testFileForSearchFunctionsResource.txt

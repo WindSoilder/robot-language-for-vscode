@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>patterns</key>
+    <array>
+        <dict>
+            <!-- match for:
+            *** Test Case ***
+            *** Test Cases ***
+            *** Variable ***
+            *** Variables ***
+            *** Setting ***
+            *** Settings ***
+            *** Keyword ***
+            *** Keywords ***
+            -->
+            <key>match</key>
+            <string>(?i)^\*\*\* (Test Case|Variable|Setting|Keyword)(s{0,1}) \*\*\*$</string>
+            <key>name</key>
+            <string>string.robot</string>
+        </dict>
+
+        <dict>
+            <!--
+               match for comment, the comment syntax in robotframework is:
+               #
+            -->
+            <key>name</key>
+            <string>comment.line.robot</string>
+            <key>match</key>
+            <string>^.*#.*</string>
+        </dict>
+
+        <dict>
+            <!--
+                match for comment, the comment syntax in robotframework keyword is:
+                comment
+            -->
+            <key>name</key>
+            <string>comment.line.robot</string>
+            <key>match</key>
+            <string>(?i)^.*comment\s{2,}.*</string>
+        </dict>
+
+        <dict>
+            <!-- match for:
+            ${Variable}
+            don't mind if the variable is defined or not
+            -->
+            <key>name</key>
+            <string>variable.other.robot</string>
+            <key>match</key>
+            <string>\$\{.*?\}</string>
+        </dict>
+
+        <dict>
+            <!-- match for robot framework keyword arguments:
+            [Arguments]
+            -->
+            <key>name</key>
+            <string>keyword.other.robot</string>
+            <key>match</key>
+            <string>^\s{2,}\[Arguments\]</string>
+        </dict>
+
+        <dict>
+            <!-- match for
+            A word which appear in the first part of a line, e.g:
+                This is a keyword    ${arg1}    ${arg2}
+            It should appear in Keyword body in a keyword or test case's definition
+            -->
+            <key>name</key>
+            <string>keyword.other.robot</string>
+            <key>match</key>
+            <string>^\s{2,}(\S+\s{0,1})+</string>
+        </dict>
+
+        <dict>
+            <!-- match for
+            library, resource 
+            which should appear in setting table
+            -->
+            <key>name</key>
+            <string>keyword.other.robot</string>
+            <key>match</key>
+            <string>(?i)^(library|resource)</string>
+        </dict>
+        <dict>
+            <!-- match for
+            Key name or Test Case name
+            They should appear in the Keywords table or Test Case table in a suite
+            -->
+            <key>name</key>
+            <string>entity.name.robot</string>
+            <key>match</key>
+            <string>^(\S+\s{0,1})+</string>
+        </dict>
+
+
+    </array>
+        
+    <!-- 
+    Normaly it would be a two part name where the first is 
+    whether `text` or `source` and 
+    the second is the name of the language or document type 
+    -->
+    <key>scopeName</key>
+    <string>text.robot</string>
+
+    <key>uuid</key>
+    <string>20e62c06-beb6-11e6-8d8e-642737f42dbe</string>
+</dict>
+</plist>

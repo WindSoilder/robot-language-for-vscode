@@ -1,0 +1,3 @@
+*** Variables ***
+${testAttrName}    robotExtensionTestAttrName
+${testAttrValue}    robotExtensionTestAttrValue

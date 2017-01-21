@@ -47,20 +47,32 @@ exports.RobotDefinitionProvider = RobotDefinitionProvider;
 /**
  * when user input F12, this function will return a keyword value
  * which he want to search
- * Need Unit Test
  */
 function foundKeywordInDocument(document, position) {
     let line = position.line, column = position.character;
     let doc = document.lineAt(position.line).text;
     let c = doc[column];
-    let pattern = new RegExp(`(\\S+ )*\\S*${c}\\S*( \\S+)*`);
+    return foundKeywordInCurrentLine(doc, c, column);
+}
+exports.foundKeywordInDocument = foundKeywordInDocument;
+/**
+ * return keyword name in the line
+ * Note that it's only invoked by foundKeywordInDocument
+ * args:
+ *     src -- the source of line to search keyword
+ *     character -- the position character value
+ *     cloumnPos -- the column of character in src, starts with 0
+ * Need Unit Test
+ */
+function foundKeywordInCurrentLine(src, character, columnPos) {
+    let pattern = new RegExp(`(\\S+ )*\\S*${character}\\S*( \\S+)*`);
     let match;
     let totalMatchedPatternLength = 0;
     do {
-        match = doc.match(pattern);
-        doc = doc.replace(match[0], '');
+        match = src.match(pattern);
+        src = src.replace(match[0], '');
         totalMatchedPatternLength += match[0].length;
-    } while (match.index + totalMatchedPatternLength < column);
+    } while (match.index + totalMatchedPatternLength < columnPos);
     // Should omit Given, When, Then, And builtin keyword.
     // these keywords is use for data-driven style test case
     let givenWhenThenAndPattern = /(Given |When |Then |And )/i;
@@ -68,5 +80,5 @@ function foundKeywordInDocument(document, position) {
     console.log(targetKeyword);
     return targetKeyword;
 }
-exports.foundKeywordInDocument = foundKeywordInDocument;
+exports.foundKeywordInCurrentLine = foundKeywordInCurrentLine;
 //# sourceMappingURL=robotDefinitionProvider.js.map

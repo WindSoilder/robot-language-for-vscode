@@ -55,23 +55,34 @@ export class RobotDefinitionProvider implements DefinitionProvider {
 /**
  * when user input F12, this function will return a keyword value
  * which he want to search
- * Need Unit Test
  */
 export function foundKeywordInDocument(document: TextDocument, position: Position) : string {
-
     let line: number = position.line, column: number = position.character;
     let doc : string = document.lineAt(position.line).text;
     let c : string = doc[column];
-    
-    let pattern : RegExp = new RegExp(`(\\S+ )*\\S*${c}\\S*( \\S+)*`);
+
+    return foundKeywordInCurrentLine(doc, c, column);
+}
+
+/**
+ * return keyword name in the line
+ * Note that it's only invoked by foundKeywordInDocument
+ * args:
+ *     src -- the source of line to search keyword 
+ *     character -- the position character value
+ *     cloumnPos -- the column of character in src, starts with 0
+ * Need Unit Test
+ */
+export function foundKeywordInCurrentLine(src : string, character : string, columnPos : number) {
+    let pattern : RegExp = new RegExp(`(\\S+ )*\\S*${character}\\S*( \\S+)*`);
     let match; 
     let totalMatchedPatternLength : number = 0;
 
     do {
-       match = doc.match(pattern);
-       doc = doc.replace(match[0], '');
+       match = src.match(pattern);
+       src = src.replace(match[0], '');
        totalMatchedPatternLength += match[0].length;
-    } while (match.index + totalMatchedPatternLength < column); 
+    } while (match.index + totalMatchedPatternLength < columnPos); 
 
     // Should omit Given, When, Then, And builtin keyword.
     // these keywords is use for data-driven style test case
@@ -79,6 +90,6 @@ export function foundKeywordInDocument(document: TextDocument, position: Positio
     let targetKeyword = match[0].replace(givenWhenThenAndPattern, '');
     
     console.log(targetKeyword);
-    return targetKeyword;
+    return targetKeyword;    
 }
 

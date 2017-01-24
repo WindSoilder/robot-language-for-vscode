@@ -77,6 +77,13 @@ function foundKeywordInCurrentLine(src, character, columnPos) {
     // these keywords is use for data-driven style test case
     let givenWhenThenAndPattern = /(Given |When |Then |And )/i;
     let targetKeyword = match[0].replace(givenWhenThenAndPattern, '');
+    // add for variable support.....
+    // if the target keyword have variable syntax, this function
+    // will return the variable syntax
+    let matchVariableSyntaxResult = targetKeyword.match(/(\$\{.+\}).*/);
+    if (matchVariableSyntaxResult) {
+        targetKeyword = matchVariableSyntaxResult[1];
+    }
     console.log(targetKeyword);
     return targetKeyword;
 }

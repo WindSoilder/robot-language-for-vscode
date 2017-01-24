@@ -8,6 +8,8 @@ const testCaseFileParser_1 = require("./testCaseFileParser");
 var visitedLibrarySet = new Set();
 // Save all resources absoluted path that we have visited
 var visitedResourceSet = new Set();
+// Save all resources absoluted path that we have visited 
+var varVisitedResourceSet = new Set();
 /**
  * these three function here need Unit Test.
  */
@@ -167,4 +169,8 @@ function initializeVisitedSet() {
     visitedResourceSet = new Set();
 }
 exports.initializeVisitedSet = initializeVisitedSet;
+function initializeVarVisitedSet() {
+    varVisitedResourceSet = new Set();
+}
+exports.initializeVarVisitedSet = initializeVarVisitedSet;
 //# sourceMappingURL=searchFunctions.js.map

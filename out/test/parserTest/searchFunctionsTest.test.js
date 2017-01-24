@@ -68,5 +68,41 @@ suite("search functions tests", () => {
         let loc = searchFunctions_1.searchInResourceTable(testKeywordName, suite);
         assertLocationEqual(loc, expectLocation, "searchInResourceTable");
     });
+    /*
+        test("varSearchInVariableTable function test", () => {
+            let testVarNames : string[] = [
+                "${testVar1}", "${test Var 2}"
+            ];
+            let expectResourceUri : Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctions.txt"));
+            let expectLocations : Location[] = [
+                new Location(expectResourceUri, new Position(8, 0)),
+                new Location(expectResourceUri, new Position(9, 0))
+            ];
+            let suite : TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
+            
+            for (let index in testVarNames) {
+                let loc : Location = searchVarInVariableTable(testVarNames[index], suite);
+                assertLocationEqual(loc, expectLocations[index], "searchVarInVariableTable");
+            }
+        });
+    
+        test("varSearchInResourceTable function test", () => {
+            let testVarNames : string[] = [
+                "${testVar3}", "${test Var 4}"
+            ];
+            let expectResourceUri : Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctionsResource.txt"));
+            let expectLocations : Location[] = [
+                new Location(expectResourceUri, new Position(1, 0)),
+                new Location(expectResourceUri, new Position(2, 0))
+            ]
+            let suite : TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
+    
+            for (let index in testVarNames) {
+                initializeVarVisitedSet();
+                let loc : Location = searchVarInResourceTable(testVarNames[index], suite);
+                assertLocationEqual(loc, expectLocations[index], "searchVarInResourceTable");
+            }
+        });
+        */
 });
 //# sourceMappingURL=searchFunctionsTest.test.js.map

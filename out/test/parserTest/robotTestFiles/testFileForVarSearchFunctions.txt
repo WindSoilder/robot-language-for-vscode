@@ -1,0 +1,10 @@
+*** Keywords ***
+Keyword1
+    test function 1    ${testVar1}    ${test Var 2}    ${testVar3}    ${test Var 4}
+
+*** Settings ***
+resource    testFileForVarSearchFunctionsResource.txt
+
+*** Variables ***
+${testVar1}    varValue1
+${test Var 2}    varValue2

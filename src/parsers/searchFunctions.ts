@@ -11,6 +11,9 @@ var visitedLibrarySet = new Set();
 // Save all resources absoluted path that we have visited
 var visitedResourceSet = new Set();
 
+// Save all resources absoluted path that we have visited 
+var varVisitedResourceSet = new Set();
+
 /**
  * these three function here need Unit Test.
  */
@@ -191,3 +194,7 @@ export function initializeVisitedSet() {
     visitedLibrarySet = new Set();
     visitedResourceSet = new Set();
 } 
+
+export function initializeVarVisitedSet() {
+    varVisitedResourceSet = new Set();
+}

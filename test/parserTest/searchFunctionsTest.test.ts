@@ -5,6 +5,7 @@ import {Location, Position, Uri} from 'vscode';
 import * as path from 'path';
 
 import {searchInKeywordTable, searchInLibraryTable, searchInResourceTable, initializeVisitedSet} from '../../src/parsers/searchFunctions';
+//initializeVarVisitedSet, searchVarInVariableTable, searchVarInResourceTable} from '../../src/parsers/searchFunctions';
 import {TestSuite} from '../../src/robotModels/TestSuite';
 import {Keyword} from '../../src/robotModels/Keyword';
 import {LibraryMetaData, ResourceMetaData} from '../../src/robotModels/MetaData';
@@ -85,4 +86,41 @@ suite("search functions tests", () => {
         let loc : Location = searchInResourceTable(testKeywordName, suite);
         assertLocationEqual(loc, expectLocation, "searchInResourceTable");
     });
+
+/*
+    test("varSearchInVariableTable function test", () => {
+        let testVarNames : string[] = [
+            "${testVar1}", "${test Var 2}"
+        ];
+        let expectResourceUri : Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctions.txt"));
+        let expectLocations : Location[] = [
+            new Location(expectResourceUri, new Position(8, 0)),
+            new Location(expectResourceUri, new Position(9, 0))
+        ];
+        let suite : TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
+        
+        for (let index in testVarNames) {
+            let loc : Location = searchVarInVariableTable(testVarNames[index], suite);
+            assertLocationEqual(loc, expectLocations[index], "searchVarInVariableTable");
+        }
+    });
+
+    test("varSearchInResourceTable function test", () => {
+        let testVarNames : string[] = [
+            "${testVar3}", "${test Var 4}"
+        ];
+        let expectResourceUri : Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctionsResource.txt"));
+        let expectLocations : Location[] = [
+            new Location(expectResourceUri, new Position(1, 0)),
+            new Location(expectResourceUri, new Position(2, 0))
+        ]
+        let suite : TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
+
+        for (let index in testVarNames) {
+            initializeVarVisitedSet();
+            let loc : Location = searchVarInResourceTable(testVarNames[index], suite);
+            assertLocationEqual(loc, expectLocations[index], "searchVarInResourceTable");
+        }
+    });
+    */
 });

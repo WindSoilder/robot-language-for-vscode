@@ -1,0 +1,3 @@
+*** Variables ***
+${testVar3}    varValue3
+${test Var 4}    varValue4

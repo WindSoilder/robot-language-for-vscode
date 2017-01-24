@@ -1,12 +1,16 @@
 import {foundKeywordInCurrentLine as ficl} from '../../src/providers/robotDefinitionProvider';
 import * as assert from 'assert'; 
 
+/**
+ * the keyword in provider's function include Keyword and Variable find
+ */
 suite("provider's find keyword test", () => {
     function assertSearchSuccess(testSrc : string, expectKeyword : string, testCharacters : string[],
                                  testColumns : number[]) {
         assert.ok(testCharacters.length == testColumns.length, "the length of test characters list must be equal to the length of test columns");        
         for (let index in testCharacters) {
-             assert.equal(ficl(testSrc, testCharacters[index], testColumns[index]), expectKeyword);
+             assert.equal(ficl(testSrc, testCharacters[index], testColumns[index]), expectKeyword,
+             `testing search for "${testCharacters[index]}" in "${testSrc}" failed`);
         }
     }
     
@@ -77,5 +81,50 @@ suite("provider's find keyword test", () => {
             testColumns.push(expectKeyword.indexOf(testCharacter));
         }
         assertSearchSuccess(testSrc, expectKeyword, testCharacters, testColumns);
+    });
+
+    test("find variable value with no constant", () => {
+        // test for find variable definition, the value is used purely
+        // such as ${testarg}
+        let testSrc : string = "keyword with one word    ${a arg}";
+        let expectVariableName : string = "${a arg}";
+        let testCharacters : string[] = ["g"];
+        let testColumns : number[] = [];
+
+        for (let testCharacter of testCharacters) {
+            testColumns.push(testSrc.indexOf(testCharacter));
+        }
+
+        assertSearchSuccess(testSrc, expectVariableName, testCharacters, testColumns);
+    });
+
+    test("find variable value with constant prefix", () => {
+        // test for find variable definition, the value is used with constant prefix
+        // such as constant_${testarg}
+        let testSrc : string = "keyword with two args    1_1_${ anotherArg }    2";
+        let expectVariableName : string = "${ anotherArg }";
+        let testCharacters : string[] = ["1", "{", "}", "A"];
+        let testColumns : number[] = [];
+
+        for (let testCharacter of testCharacters) {
+            testColumns.push(testSrc.indexOf(testCharacter));
+        }
+
+        assertSearchSuccess(testSrc, expectVariableName, testCharacters, testColumns);
+    });
+
+    test("find variable value with constant suffix", () => {
+        // test for find variable definition, the value is used with constant suffix
+        // such as ${testarg}_constant
+        let testSrc : string = "keyword with three arg    ${argOne}    ${this is one argument}_2_3    ${argThree}";
+        let expectVariableName : string = "${this is one argument}";
+        let testCharacters : string[] = ["s", "u", "2", "3", "_"];
+        let testColumns : number[] = [];
+
+        for (let testCharacter of testCharacters) {
+            testColumns.push(testSrc.indexOf(testCharacter));
+        }
+        
+        assertSearchSuccess(testSrc, expectVariableName, testCharacters, testColumns);
     });
 });

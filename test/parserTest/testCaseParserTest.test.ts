@@ -15,6 +15,15 @@ suite("File Builder Test", () => {
     let resourceSettingValue : string = "../test_resource";
     let expectedResourceMetaData : ResourceMetaData[] = [new ResourceMetaData("Resource", "../test_resource")];
     let expectedKeywordNames : string[] = ["keyword one", "keyword two"];
+    let expectedVarNames : string[] = ["${testAttrName}", "${test another attr}"];
+
+    function assertVarTableExisted(suite : TestSuite) {
+        let suiteVarNames : string[] = [];
+        for (let v of suite.variables) {
+            suiteVarNames.push(v.name);
+        }
+        assert.equal(suiteVarNames.sort().toString(), expectedVarNames.sort().toString());
+    }
 
     function assertKeywordTableExisted(suite : TestSuite) {
         let suiteKeywordNames : string[] = [];
@@ -43,6 +52,7 @@ suite("File Builder Test", () => {
 
         assertKeywordTableExisted(suite);
         assertResourceSettingExisted(suite);
+        assertVarTableExisted(suite);
     });
 
     test("test build file with only setting table", () => {
@@ -99,4 +109,12 @@ suite("File Builder Test", () => {
 
         assert.equal(suite, null, "build suite with illegal syntax should return null");
     });
+
+    test("test build file with variable table", () => {
+        let fileName : string = "testWithOnlyVariableTable.txt";
+        let suite : TestSuite = getSuiteFromFileName(fileName);
+
+        assertVarTableExisted(suite);
+    });
+
 });

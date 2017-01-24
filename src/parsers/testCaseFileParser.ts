@@ -3,6 +3,7 @@ import {TextDocument, Uri} from 'vscode';
 import {TestSuite} from '../robotModels/TestSuite';
 import {KeywordTablePopulator} from '../populators/keywordTablePopulator';
 import {SettingTablePopulator} from '../populators/settingTablePopulator';
+import {VariableTablePopulator} from '../populators/variableTablePopulator';
 
 /**
  * this function need Unit Test
@@ -33,12 +34,15 @@ export function buildFileToSuite(filePath : string) : TestSuite {
             } else if (-1 != TestSuite.setting_table_names.indexOf(header)) {
                 ++currentLineNumber;
                 currentLineNumber = SettingTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
-            } else if (-1 != TestSuite.variable_table_names.indexOf(header) ||
-                       -1 != TestSuite.testcase_table_names.indexOf(header)) {
+            } else if (-1 != TestSuite.variable_table_names.indexOf(header)) {
+                ++currentLineNumber;
+                currentLineNumber = VariableTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
+            } else if(-1 != TestSuite.testcase_table_names.indexOf(header)) {
                 // the header is legal but we are not concern for it
                 // we are not concern about Variable table and TestCase table
                 currentLineNumber++;
             } else {
+                // the header name is illegal, so parse should failed.
                 return null;
             }
         } // end if (match)

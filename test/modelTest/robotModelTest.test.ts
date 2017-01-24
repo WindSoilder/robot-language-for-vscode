@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 
 import {Keyword} from '../../src/robotModels/Keyword';
 import {TestSuite} from '../../src/robotModels/TestSuite';
+import {Variable} from '../../src/robotModels/Variable';
 import {MetaData, LibraryMetaData, ResourceMetaData} from '../../src/robotModels/MetaData';
 
 // mainly assert that models in robotframework have some property
@@ -49,4 +50,12 @@ suite("Robot Model Tests", () => {
         assert(resourceMetaData.dataType == test_data_type);
         assert(resourceMetaData.dataValue == test_data_value);
     });
+
+   test("Variable Test", () => {
+        let testVarName: string = "a variable";
+        let testVarNumber : number = 3;
+        let v : Variable = new Variable(testVarNumber, testVarName);
+        assert(v.name == testVarName, "the variable name does not match what it given!");
+        assert(v.position == testVarNumber, "the position of variable does not match what it had given!");
+   });
 }); 

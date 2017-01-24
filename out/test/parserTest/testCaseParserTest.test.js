@@ -9,6 +9,14 @@ suite("File Builder Test", () => {
     let resourceSettingValue = "../test_resource";
     let expectedResourceMetaData = [new MetaData_1.ResourceMetaData("Resource", "../test_resource")];
     let expectedKeywordNames = ["keyword one", "keyword two"];
+    let expectedVarNames = ["${testAttrName}", "${test another attr}"];
+    function assertVarTableExisted(suite) {
+        let suiteVarNames = [];
+        for (let v of suite.variables) {
+            suiteVarNames.push(v.name);
+        }
+        assert.equal(suiteVarNames.sort().toString(), expectedVarNames.sort().toString());
+    }
     function assertKeywordTableExisted(suite) {
         let suiteKeywordNames = [];
         for (let keyword of suite.keywords) {
@@ -31,6 +39,7 @@ suite("File Builder Test", () => {
         let suite = parserUtil_1.getSuiteFromFileName(fileName);
         assertKeywordTableExisted(suite);
         assertResourceSettingExisted(suite);
+        assertVarTableExisted(suite);
     });
     test("test build file with only setting table", () => {
         let fileName = "testWithOnlySettingTable.txt";
@@ -72,6 +81,11 @@ suite("File Builder Test", () => {
         let fileName = "testWithIllegalSyntax.txt";
         let suite = parserUtil_1.getSuiteFromFileName(fileName);
         assert.equal(suite, null, "build suite with illegal syntax should return null");
+    });
+    test("test build file with variable table", () => {
+        let fileName = "testWithOnlyVariableTable.txt";
+        let suite = parserUtil_1.getSuiteFromFileName(fileName);
+        assertVarTableExisted(suite);
     });
 });
 //# sourceMappingURL=testCaseParserTest.test.js.map

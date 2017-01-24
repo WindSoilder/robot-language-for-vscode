@@ -7,6 +7,7 @@ class TestSuite {
         this.libraryMetaDatas = [];
         this.resourceMetaDatas = [];
         this.keywords = [];
+        this.variables = [];
         this.source = sou;
     }
     get libraryMetaDatas() { return this._libraryMetaDatas; }
@@ -15,6 +16,8 @@ class TestSuite {
     set resourceMetaDatas(value) { this._resourceMetaDatas = value; }
     get keywords() { return this._keywords; }
     set keywords(value) { this._keywords = value; }
+    get variables() { return this._variables; }
+    set variables(value) { this._variables = value; }
     get source() { return this._source; }
     set source(value) { this._source = value; }
 }

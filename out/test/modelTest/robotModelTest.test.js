@@ -4,6 +4,7 @@
 const assert = require("assert");
 const Keyword_1 = require("../../src/robotModels/Keyword");
 const TestSuite_1 = require("../../src/robotModels/TestSuite");
+const Variable_1 = require("../../src/robotModels/Variable");
 const MetaData_1 = require("../../src/robotModels/MetaData");
 // mainly assert that models in robotframework have some property
 suite("Robot Model Tests", () => {
@@ -39,6 +40,13 @@ suite("Robot Model Tests", () => {
         let resourceMetaData = new MetaData_1.ResourceMetaData(test_data_type, test_data_value);
         assert(resourceMetaData.dataType == test_data_type);
         assert(resourceMetaData.dataValue == test_data_value);
+    });
+    test("Variable Test", () => {
+        let testVarName = "a variable";
+        let testVarNumber = 3;
+        let v = new Variable_1.Variable(testVarNumber, testVarName);
+        assert(v.name == testVarName, "the variable name does not match what it given!");
+        assert(v.position == testVarNumber, "the position of variable does not match what it had given!");
     });
 });
 //# sourceMappingURL=robotModelTest.test.js.map

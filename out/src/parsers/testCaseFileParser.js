@@ -4,6 +4,7 @@ const vscode_1 = require("vscode");
 const TestSuite_1 = require("../robotModels/TestSuite");
 const keywordTablePopulator_1 = require("../populators/keywordTablePopulator");
 const settingTablePopulator_1 = require("../populators/settingTablePopulator");
+const variableTablePopulator_1 = require("../populators/variableTablePopulator");
 /**
  * this function need Unit Test
  */
@@ -32,13 +33,17 @@ function buildFileToSuite(filePath) {
                 ++currentLineNumber;
                 currentLineNumber = settingTablePopulator_1.SettingTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
             }
-            else if (-1 != TestSuite_1.TestSuite.variable_table_names.indexOf(header) ||
-                -1 != TestSuite_1.TestSuite.testcase_table_names.indexOf(header)) {
+            else if (-1 != TestSuite_1.TestSuite.variable_table_names.indexOf(header)) {
+                ++currentLineNumber;
+                currentLineNumber = variableTablePopulator_1.VariableTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
+            }
+            else if (-1 != TestSuite_1.TestSuite.testcase_table_names.indexOf(header)) {
                 // the header is legal but we are not concern for it
                 // we are not concern about Variable table and TestCase table
                 currentLineNumber++;
             }
             else {
+                // the header name is illegal, so parse should failed.
                 return null;
             }
         } // end if (match)

@@ -3,7 +3,7 @@ Resource          ../test_resource
 
 *** Variables ***
 ${testAttrName}    robotExtensionTestAttrName
-${testAttrValue}    robotExtensionTestAttrValue
+${test another attr}    robotExtensionTestAttrValue
 
 *** Test Cases ***
 test with all tables test case

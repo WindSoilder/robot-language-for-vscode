@@ -1,4 +1,4 @@
 import {Searchable} from './Searchable';
 
-export class Keyword extends Searchable {
+export class Variable extends Searchable {
 }

@@ -107,6 +107,49 @@ export function searchInResourceTable(targetKeyword : string, sourceSuite : Test
     } // end for (let resource of suite.resourceMetaDatas)
 }
 
+export function searchVarInVariableTable(targetVariable : string, sourceSuite : TestSuite) : Location {
+    // iterate variable list, if found target variable in variable list
+    // return the variable's definition location, else return null
+    for (let variable of sourceSuite.variables) {
+        if (targetVariable.toLowerCase() == variable.name.toLowerCase()) {
+            let loc : Location = new Location(sourceSuite.source, 
+                                              new Position(variable.position, 0));
+            return loc;
+        }
+    }
+    return null;
+}
+
+export function searchVarInResourceTable(targetVariable : string, sourceSuite : TestSuite) : Location {
+    let currentPath : string = sourceSuite.source.path.replace('/', '');
+    currentPath = path.dirname(currentPath);
+
+    // the filePath need to be compatible with different systems :(
+    for (let resource of sourceSuite.resourceMetaDatas) {
+        let targetPath = path.join(currentPath, resource.dataValue);
+
+        if (varVisitedResourceSet.has(targetPath)) {
+            continue;
+        }
+
+        let suite : TestSuite = buildFileToSuite(targetPath);
+
+        if (null == suite) {
+            continue;   // continue to next suite
+        }
+
+        visitedResourceSet.add(targetPath);
+        let location : Location = searchVarInVariableTable(targetVariable, suite);
+        if (location) {
+            return location;
+        }
+        else {
+            location = searchInResourceTable(targetVariable, suite);
+            if (location) return location;
+        }
+    } // end for (let resource of suite.resourceMetaDatas)
+}
+
 /**
  * get the library full path according to library meta data
  * if the library is not existed, return null

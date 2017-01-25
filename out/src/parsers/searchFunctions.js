@@ -93,6 +93,44 @@ function searchInResourceTable(targetKeyword, sourceSuite) {
     } // end for (let resource of suite.resourceMetaDatas)
 }
 exports.searchInResourceTable = searchInResourceTable;
+function searchVarInVariableTable(targetVariable, sourceSuite) {
+    // iterate variable list, if found target variable in variable list
+    // return the variable's definition location, else return null
+    for (let variable of sourceSuite.variables) {
+        if (targetVariable.toLowerCase() == variable.name.toLowerCase()) {
+            let loc = new vscode_1.Location(sourceSuite.source, new vscode_1.Position(variable.position, 0));
+            return loc;
+        }
+    }
+    return null;
+}
+exports.searchVarInVariableTable = searchVarInVariableTable;
+function searchVarInResourceTable(targetVariable, sourceSuite) {
+    let currentPath = sourceSuite.source.path.replace('/', '');
+    currentPath = path.dirname(currentPath);
+    // the filePath need to be compatible with different systems :(
+    for (let resource of sourceSuite.resourceMetaDatas) {
+        let targetPath = path.join(currentPath, resource.dataValue);
+        if (varVisitedResourceSet.has(targetPath)) {
+            continue;
+        }
+        let suite = testCaseFileParser_1.buildFileToSuite(targetPath);
+        if (null == suite) {
+            continue; // continue to next suite
+        }
+        visitedResourceSet.add(targetPath);
+        let location = searchVarInVariableTable(targetVariable, suite);
+        if (location) {
+            return location;
+        }
+        else {
+            location = searchInResourceTable(targetVariable, suite);
+            if (location)
+                return location;
+        }
+    } // end for (let resource of suite.resourceMetaDatas)
+}
+exports.searchVarInResourceTable = searchVarInResourceTable;
 /**
  * get the library full path according to library meta data
  * if the library is not existed, return null

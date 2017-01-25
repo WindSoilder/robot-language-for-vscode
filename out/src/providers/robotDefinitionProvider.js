@@ -6,40 +6,23 @@ class RobotDefinitionProvider {
         console.log('path in provide definition:' + document.uri.path);
         // initialize the visitedSet
         searchFunctions_1.initializeVisitedSet();
+        searchFunctions_1.initializeVarVisitedSet();
         // the filePath need to be compatible with different systems :(
         let filePath = document.uri.path.replace('/', '');
         // 1. find the whole keyword that we want to search
         let targetKeyword = foundKeywordInDocument(document, position).trim();
         console.log("target keyword:" + targetKeyword.length);
-        return new Promise((resolve, reject) => {
-            // 2. build document to a suite (complete)
-            let suite = testCaseFileParser_1.buildFileToSuite(filePath);
-            if (null == suite) {
-                reject(`the file ${filePath} is not existed`);
-            }
-            // 3. search in suite keywords table
-            let location = searchFunctions_1.searchInKeywordTable(targetKeyword, suite);
-            if (location) {
-                console.log(targetKeyword + " is matched in keyword table");
-                return resolve(location);
-            }
-            else {
-                location = searchFunctions_1.searchInLibraryTable(targetKeyword, suite);
-                if (location) {
-                    console.log(targetKeyword + " is matched in library table");
-                    return resolve(location);
-                }
-                else {
-                    location = searchFunctions_1.searchInResourceTable(targetKeyword, suite);
-                    if (location) {
-                        console.log(targetKeyword + " is matched in resource table");
-                        return resolve(location);
-                    }
-                }
-            }
-            return reject(`can't find the fefinition of "${targetKeyword}"`);
-        });
-        // when we wan't to return a thenable object, we can use Promise object
+        if (isVariableSyntax(targetKeyword)) {
+            return new Promise((resolve, reject) => {
+                gotoVariableDefinition(resolve, reject, targetKeyword, filePath);
+            });
+        }
+        else {
+            return new Promise((resolve, reject) => {
+                gotoKeywordDefinition(resolve, reject, targetKeyword, filePath);
+            });
+        }
+        // when we want to return a thenable object, we can use Promise object
         // return new Promise<Location>(robotGotoDefinition)
     }
 }
@@ -88,4 +71,86 @@ function foundKeywordInCurrentLine(src, character, columnPos) {
     return targetKeyword;
 }
 exports.foundKeywordInCurrentLine = foundKeywordInCurrentLine;
+/**
+ * return true if the checkedStr argument is something like ${..}
+ * or return null.
+ */
+function isVariableSyntax(checkedStr) {
+    if (checkedStr.match(/(\$\{.+\})/)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+/**
+ * goto variable's definition location
+ * arguments:
+ *     resolve -- a function, when the search is success, this function should be invoked, the function argument is a location.
+ *     reject  -- a function, when the search is failed, this function should be invoked, the function argument is a string named reason.
+ *     targetVariable -- the variable that we want to search
+ *     filePath -- where is the targetVariable appears.
+ */
+function gotoVariableDefinition(resolve, reject, targetVariable, filePath) {
+    // build document to a suite
+    let suite = testCaseFileParser_1.buildFileToSuite(filePath);
+    if (null == suite) {
+        reject(`the file ${filePath} is not existed`);
+    }
+    // search in suite variable table
+    let location = searchFunctions_1.searchVarInVariableTable(targetVariable, suite);
+    if (location) {
+        console.log(targetVariable + " is matched in variable table");
+        return resolve(location);
+    }
+    else {
+        // search in suite resource table
+        location = searchFunctions_1.searchVarInResourceTable(targetVariable, suite);
+        if (location) {
+            console.log(targetVariable + " is matched in resource table");
+            return resolve(location);
+        }
+    }
+    console.log(`the keyword ${targetVariable} doesn't match anywhere`);
+    return reject(`can't find the definition of "${targetVariable}"`);
+}
+/**
+ * goto keyword's definition location
+ * arguments:
+ *     resolve -- a function, when the search is success, this function should be invoked, the function argument is a location.
+ *     reject  -- a function, when the search is failed, this function should be invoked, the function argument is a string named reason.
+ *     targetKeyword -- the keyword that we want to search
+ *     filePath -- where is the targetKeyword appears.
+ */
+function gotoKeywordDefinition(resolve, reject, targetKeyword, filePath) {
+    //  build document to a suite (complete)
+    let suite = testCaseFileParser_1.buildFileToSuite(filePath);
+    if (null == suite) {
+        reject(`the file ${filePath} is not existed`);
+    }
+    //  search in suite keywords table
+    let location = searchFunctions_1.searchInKeywordTable(targetKeyword, suite);
+    if (location) {
+        console.log(targetKeyword + " is matched in keyword table");
+        return resolve(location);
+    }
+    else {
+        // search in suite library table
+        location = searchFunctions_1.searchInLibraryTable(targetKeyword, suite);
+        if (location) {
+            console.log(targetKeyword + " is matched in library table");
+            return resolve(location);
+        }
+        else {
+            // search in suite resource table
+            location = searchFunctions_1.searchInResourceTable(targetKeyword, suite);
+            if (location) {
+                console.log(targetKeyword + " is matched in resource table");
+                return resolve(location);
+            }
+        }
+    }
+    console.log(`the keyword ${targetKeyword} doesn't match anywhere`);
+    reject(`can't find the definition of "${targetKeyword}"`);
+}
 //# sourceMappingURL=robotDefinitionProvider.js.map

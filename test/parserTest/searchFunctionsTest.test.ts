@@ -4,8 +4,8 @@ import * as assert from 'assert';
 import {Location, Position, Uri} from 'vscode';
 import * as path from 'path';
 
-import {searchInKeywordTable, searchInLibraryTable, searchInResourceTable, initializeVisitedSet} from '../../src/parsers/searchFunctions';
-//initializeVarVisitedSet, searchVarInVariableTable, searchVarInResourceTable} from '../../src/parsers/searchFunctions';
+import {searchInKeywordTable, searchInLibraryTable, searchInResourceTable, initializeVisitedSet,
+        initializeVarVisitedSet, searchVarInVariableTable, searchVarInResourceTable} from '../../src/parsers/searchFunctions';
 import {TestSuite} from '../../src/robotModels/TestSuite';
 import {Keyword} from '../../src/robotModels/Keyword';
 import {LibraryMetaData, ResourceMetaData} from '../../src/robotModels/MetaData';
@@ -87,7 +87,6 @@ suite("search functions tests", () => {
         assertLocationEqual(loc, expectLocation, "searchInResourceTable");
     });
 
-/*
     test("varSearchInVariableTable function test", () => {
         let testVarNames : string[] = [
             "${testVar1}", "${test Var 2}"
@@ -122,5 +121,4 @@ suite("search functions tests", () => {
             assertLocationEqual(loc, expectLocations[index], "searchVarInResourceTable");
         }
     });
-    */
 });

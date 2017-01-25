@@ -3,7 +3,8 @@ This is the robotframework for vscode.
 
 ## Features
 Gramma highlight
-Goto definition(For now it is only support for Keyword definition and user defined library definition)
+User defined keyword Goto definition
+User defined library Goto definition
 
 ## Requirements
 User define system environment variable PY_SITE_PATH, which indicate the site package path, for example:
@@ -45,3 +46,5 @@ Although vscode use promise, I know little about async programming, so some func
 in sync way, so there may have be blocked if you using goto definition in a big test case file or a resource file.
 These functions may be fixed to active async way in later version.
 
+### 0.2.1
+Support Goto Variable definition

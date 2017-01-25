@@ -1,7 +1,8 @@
 import {DefinitionProvider, TextDocument, Position, CancellationToken, Location, Uri, commands} from 'vscode';
 import {buildFileToSuite} from '../parsers/testCaseFileParser';
 import {TestSuite} from '../robotModels/TestSuite';
-import {searchInKeywordTable, searchInLibraryTable, searchInResourceTable, initializeVisitedSet} from '../parsers/searchFunctions';
+import {searchInKeywordTable, searchInLibraryTable, searchInResourceTable, initializeVisitedSet,
+    initializeVarVisitedSet, searchVarInVariableTable, searchVarInResourceTable} from '../parsers/searchFunctions';
 
 
 export class RobotDefinitionProvider implements DefinitionProvider {
@@ -10,6 +11,7 @@ export class RobotDefinitionProvider implements DefinitionProvider {
         console.log('path in provide definition:' + document.uri.path);
         // initialize the visitedSet
         initializeVisitedSet();
+        initializeVarVisitedSet();
 
         // the filePath need to be compatible with different systems :(
         let filePath = document.uri.path.replace('/', '');
@@ -18,36 +20,17 @@ export class RobotDefinitionProvider implements DefinitionProvider {
         let targetKeyword : string = foundKeywordInDocument(document, position).trim();
         console.log("target keyword:" + targetKeyword.length);
 
-        return new Promise<Location>((resolve, reject) => {
-            // 2. build document to a suite (complete)
-            let suite: TestSuite = buildFileToSuite(filePath);
-            if (null == suite) {
-                reject(`the file ${filePath} is not existed`);
-            }
-
-            // 3. search in suite keywords table
-            let location : Location = searchInKeywordTable(targetKeyword, suite);
-            if (location) {
-                console.log(targetKeyword + " is matched in keyword table")
-                return resolve(location);
-            }
-            else {
-                location = searchInLibraryTable(targetKeyword, suite);
-                if (location) {
-                    console.log(targetKeyword + " is matched in library table")
-                    return resolve(location);
-                }
-                else {
-                    location = searchInResourceTable(targetKeyword, suite);
-                    if (location) {
-                        console.log(targetKeyword + " is matched in resource table")
-                        return resolve(location);
-                    }
-                }
-            }
-            return reject(`can't find the fefinition of "${targetKeyword}"`);    
-        })
-        // when we wan't to return a thenable object, we can use Promise object
+        if (isVariableSyntax(targetKeyword)) {
+            return new Promise<Location>((resolve, reject) => {
+                gotoVariableDefinition(resolve, reject, targetKeyword, filePath);
+            });
+        }
+        else {
+            return new Promise<Location>((resolve, reject) => {
+                gotoKeywordDefinition(resolve, reject, targetKeyword, filePath);
+            });
+        }
+        // when we want to return a thenable object, we can use Promise object
         // return new Promise<Location>(robotGotoDefinition)
     }
 }
@@ -101,3 +84,87 @@ export function foundKeywordInCurrentLine(src : string, character : string, colu
     return targetKeyword;    
 }
 
+/**
+ * return true if the checkedStr argument is something like ${..}
+ * or return null.
+ */
+function isVariableSyntax(checkedStr : string) : boolean {
+    if (checkedStr.match(/(\$\{.+\})/)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * goto variable's definition location
+ * arguments:
+ *     resolve -- a function, when the search is success, this function should be invoked, the function argument is a location.
+ *     reject  -- a function, when the search is failed, this function should be invoked, the function argument is a string named reason.
+ *     targetVariable -- the variable that we want to search
+ *     filePath -- where is the targetVariable appears.
+ */
+function gotoVariableDefinition(resolve, reject, targetVariable : string, filePath : string) {
+    // build document to a suite
+    let suite : TestSuite = buildFileToSuite(filePath);
+    if (null == suite) {
+        reject(`the file ${filePath} is not existed`);
+    }
+
+    // search in suite variable table
+    let location : Location = searchVarInVariableTable(targetVariable, suite);
+    if (location) {
+        console.log(targetVariable + " is matched in variable table");
+        return resolve(location);
+    } else {
+        // search in suite resource table
+        location = searchVarInResourceTable(targetVariable, suite);
+        if (location) {
+            console.log(targetVariable + " is matched in resource table")
+            return resolve(location);
+        }
+    }
+    console.log(`the keyword ${targetVariable} doesn't match anywhere`)
+    return reject(`can't find the definition of "${targetVariable}"`);    
+}
+
+/**
+ * goto keyword's definition location
+ * arguments:
+ *     resolve -- a function, when the search is success, this function should be invoked, the function argument is a location.
+ *     reject  -- a function, when the search is failed, this function should be invoked, the function argument is a string named reason.
+ *     targetKeyword -- the keyword that we want to search
+ *     filePath -- where is the targetKeyword appears.
+ */
+function gotoKeywordDefinition(resolve, reject, targetKeyword : string, filePath : string) {
+    //  build document to a suite (complete)
+    let suite: TestSuite = buildFileToSuite(filePath);
+    if (null == suite) {
+        reject(`the file ${filePath} is not existed`);
+    }
+
+    //  search in suite keywords table
+    let location : Location = searchInKeywordTable(targetKeyword, suite);
+    if (location) {
+        console.log(targetKeyword + " is matched in keyword table")
+        return resolve(location);
+    }
+    else {
+        // search in suite library table
+        location = searchInLibraryTable(targetKeyword, suite);
+        if (location) {
+            console.log(targetKeyword + " is matched in library table")
+            return resolve(location);
+        }
+        else {
+            // search in suite resource table
+            location = searchInResourceTable(targetKeyword, suite);
+            if (location) {
+                console.log(targetKeyword + " is matched in resource table")
+                return resolve(location);
+            }
+        }
+    }
+    console.log(`the keyword ${targetKeyword} doesn't match anywhere`)
+    reject(`can't find the definition of "${targetKeyword}"`);    
+}

@@ -68,41 +68,36 @@ suite("search functions tests", () => {
         let loc = searchFunctions_1.searchInResourceTable(testKeywordName, suite);
         assertLocationEqual(loc, expectLocation, "searchInResourceTable");
     });
-    /*
-        test("varSearchInVariableTable function test", () => {
-            let testVarNames : string[] = [
-                "${testVar1}", "${test Var 2}"
-            ];
-            let expectResourceUri : Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctions.txt"));
-            let expectLocations : Location[] = [
-                new Location(expectResourceUri, new Position(8, 0)),
-                new Location(expectResourceUri, new Position(9, 0))
-            ];
-            let suite : TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
-            
-            for (let index in testVarNames) {
-                let loc : Location = searchVarInVariableTable(testVarNames[index], suite);
-                assertLocationEqual(loc, expectLocations[index], "searchVarInVariableTable");
-            }
-        });
-    
-        test("varSearchInResourceTable function test", () => {
-            let testVarNames : string[] = [
-                "${testVar3}", "${test Var 4}"
-            ];
-            let expectResourceUri : Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctionsResource.txt"));
-            let expectLocations : Location[] = [
-                new Location(expectResourceUri, new Position(1, 0)),
-                new Location(expectResourceUri, new Position(2, 0))
-            ]
-            let suite : TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
-    
-            for (let index in testVarNames) {
-                initializeVarVisitedSet();
-                let loc : Location = searchVarInResourceTable(testVarNames[index], suite);
-                assertLocationEqual(loc, expectLocations[index], "searchVarInResourceTable");
-            }
-        });
-        */
+    test("varSearchInVariableTable function test", () => {
+        let testVarNames = [
+            "${testVar1}", "${test Var 2}"
+        ];
+        let expectResourceUri = vscode_1.Uri.file(parserUtil_1.testFileAbsPath("testFileForVarSearchFunctions.txt"));
+        let expectLocations = [
+            new vscode_1.Location(expectResourceUri, new vscode_1.Position(8, 0)),
+            new vscode_1.Location(expectResourceUri, new vscode_1.Position(9, 0))
+        ];
+        let suite = parserUtil_1.getSuiteFromFileName("testFileForVarSearchFunctions.txt");
+        for (let index in testVarNames) {
+            let loc = searchFunctions_1.searchVarInVariableTable(testVarNames[index], suite);
+            assertLocationEqual(loc, expectLocations[index], "searchVarInVariableTable");
+        }
+    });
+    test("varSearchInResourceTable function test", () => {
+        let testVarNames = [
+            "${testVar3}", "${test Var 4}"
+        ];
+        let expectResourceUri = vscode_1.Uri.file(parserUtil_1.testFileAbsPath("testFileForVarSearchFunctionsResource.txt"));
+        let expectLocations = [
+            new vscode_1.Location(expectResourceUri, new vscode_1.Position(1, 0)),
+            new vscode_1.Location(expectResourceUri, new vscode_1.Position(2, 0))
+        ];
+        let suite = parserUtil_1.getSuiteFromFileName("testFileForVarSearchFunctions.txt");
+        for (let index in testVarNames) {
+            searchFunctions_1.initializeVarVisitedSet();
+            let loc = searchFunctions_1.searchVarInResourceTable(testVarNames[index], suite);
+            assertLocationEqual(loc, expectLocations[index], "searchVarInResourceTable");
+        }
+    });
 });
 //# sourceMappingURL=searchFunctionsTest.test.js.map

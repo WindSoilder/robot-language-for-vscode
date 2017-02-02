@@ -234,10 +234,10 @@ function getLibraryFullPathForGivenRoot(rootPath : string, modulePath : string) 
 }
 
 export function initializeVisitedSet() {
-    visitedLibrarySet = new Set();
-    visitedResourceSet = new Set();
+    visitedLibrarySet.clear();
+    visitedResourceSet.clear();
 } 
 
 export function initializeVarVisitedSet() {
-    varVisitedResourceSet = new Set();
+    varVisitedResourceSet.clear();
 }

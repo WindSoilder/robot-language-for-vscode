@@ -13,7 +13,7 @@ export function testFileAbsPath(fileName : string) : string {
     // return test file absolute path according fileName
     // assume that all file is in the file's base directory
     // and should return out/test/parserTest/robotTestFiles/${fileName}
-    let testCaseFileBaseDir : string = path.join(__dirname, "robotTestFiles");     
+    let testCaseFileBaseDir : string = path.join(__dirname, "..", "..", "..", "test","robotTestFiles");     
     let filePath : string = path.join(testCaseFileBaseDir, fileName);
     return filePath;     
 }

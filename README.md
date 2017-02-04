@@ -1,6 +1,3 @@
-# robot language README
-This is the robotframework for vscode.
-
 ## Features
 Gramma highlight
 User defined keyword Goto definition
@@ -45,6 +42,3 @@ It only support robotframework working with python, it don't support java for no
 Although vscode use promise, I know little about async programming, so some function is implemented
 in sync way, so there may have be blocked if you using goto definition in a big test case file or a resource file.
 These functions may be fixed to active async way in later version.
-
-### 0.2.1
-Support Goto Variable definition

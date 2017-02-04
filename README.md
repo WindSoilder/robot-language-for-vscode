@@ -2,6 +2,7 @@
 Gramma highlight
 User defined keyword Goto definition
 User defined library Goto definition
+User defined variable Goto definition
 
 ## Requirements
 User define system environment variable PY_SITE_PATH, which indicate the site package path, for example:

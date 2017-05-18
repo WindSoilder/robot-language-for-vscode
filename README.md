@@ -1,10 +1,10 @@
 ## Features
-Gramma highlight
-User defined keyword Goto definition
+1. Gramma highlight
+2. User defined keyword Goto definition
 ![](gifs/goto_keyword_definition.gif)
-User defined library Goto definition
+3. User defined library Goto definition
 ![](gifs/goto_function_definition.gif)
-User defined variable Goto definition
+4. User defined variable Goto definition
 ![](gifs/goto_variable_definition.gif)
 
 ## Requirements

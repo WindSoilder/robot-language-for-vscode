@@ -15,7 +15,10 @@ var visitedResourceSet = new Set();
 var varVisitedResourceSet = new Set();
 
 /**
- * these three function here need Unit Test.
+ * Search keyword in the given TestSuite's Keyword Table
+ * returns:
+ *     if search successfully, return the keyword location
+ *     else return null.
  */
 export function searchInKeywordTable(targetKeyword : string, suite : TestSuite) : Location {
     // iterate keyword list, if found target keyword in keyword list
@@ -30,6 +33,12 @@ export function searchInKeywordTable(targetKeyword : string, suite : TestSuite) 
     return null;
 }
 
+/**
+ * Search keyword in the given TestSuite's Library Table
+ * returns:
+ *     if search successfully, return the keyword location
+ *     else return null
+ */
 export function searchInLibraryTable(targetKeyword : string, suite : TestSuite) : Location {
     // prerequisite: user set environment variable PY_SITE_PATH
     // iterate library list, for each library list, open the file
@@ -72,7 +81,15 @@ export function searchInLibraryTable(targetKeyword : string, suite : TestSuite) 
     return null;
 }
 
+/**
+ * Search the keyword in the given TestSuite's resource table
+ * returns:
+ *     if search successfully, return the keyword location
+ *     else return null
+ */
 export function searchInResourceTable(targetKeyword : string, sourceSuite : TestSuite) : Location {
+    // remove uri path starts with '/'
+    // the uri path is like '/C://test/test2', so we should remove the first '/'
     let currentPath : string = sourceSuite.source.path.replace('/', '');
     currentPath = path.dirname(currentPath);
     // the filePath need to be compatible with different systems :(
@@ -181,7 +198,7 @@ function getLibraryFullPath(modulePath : string, suite : TestSuite) : string {
 function getLibraryFullPathInCurrentDir(modulePath : string, suite : TestSuite) : string {
    let libraryRootPath : string = path.dirname(suite.source.path.replace('/', ''));
 
-   // use for this issue:
+   // use for this scenario:
    // library    ../../testLibrary/testmodule.py
    // for this one, we should join from module path to root path earily, and change modulePath to emptystring
    if (modulePath.startsWith('.')) {
@@ -196,10 +213,10 @@ function getLibraryFullPathInCurrentDir(modulePath : string, suite : TestSuite) 
 }
 
 function getLibraryFullPathInCurrentDirWithClassName(modulePath : string, suite : TestSuite) : string {
-   // this function is work for this issue
+   // this function is work for this scenario
    // library    dell.automation.modulename.classname
-   // for this issue, we should not return dell/automation/modulename/classname.py 
-   // rather than return dell/automation/modulename.py
+   // for this scenario, we should return dell/automation/modulename.py 
+   // rather than return dell/automation/modulename/classname.py
    let actualModulePathList : string[] = modulePath.split('.').slice(0, -1);
    let actualModulePath : string = actualModulePathList.join('.'); 
    

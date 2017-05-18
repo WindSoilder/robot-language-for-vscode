@@ -1,4 +1,7 @@
 ## [Unreleased]
+- Support goto variable definition, the variable is defined by Set Variable keyword
+- Support builtin keyword syntax highlight
+- Support variable support analyze
 
 ## 0.2.2 - 2017-02-04
 ### Added

@@ -14,6 +14,7 @@ export function buildFileToSuite(filePath : string) : TestSuite {
         return null;
     }
     let fileContent : string = fs.readFileSync(filePath).toString();
+    // in windows, lines is split by \r\n, but in linux, it's split by \n
     let lineContentList : string[] = fileContent.split('\r\n');  
     let lineCount : number = lineContentList.length;
     let currentLineNumber : number = 0;

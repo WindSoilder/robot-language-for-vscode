@@ -18,6 +18,9 @@ export class RobotDefinitionProvider implements DefinitionProvider {
         let filePath = document.uri.path.replace('/', '');
          
         // 1. find the whole keyword that we want to search
+        // debug
+        console.log(`position is ${position.line}, ${position.character}`)
+        // end debug
         let targetKeyword : string = foundKeywordInDocument(document, position).trim();
         console.log("target keyword:" + targetKeyword.length);
 
@@ -105,9 +108,11 @@ function isVariableSyntax(checkedStr : string) : boolean {
  *     targetVariable -- the variable that we want to search
  *     filePath -- where is the targetVariable appears.
  */
-export function gotoVariableDefinition(resolve, reject, targetVariable : string, filePath : string) {
-    if (globalVariableCacheSet.IsTargetInCache(targetVariable)) {
-        return resolve(globalVariableCacheSet.GetTargetLocation(targetVariable));
+export function gotoVariableDefinition(resolve, reject, targetVariable : string, filePath : string, usingCache = false) {
+    if (usingCache) {
+        if (globalVariableCacheSet.IsTargetInCache(targetVariable)) {
+            return resolve(globalVariableCacheSet.GetTargetLocation(targetVariable));
+        }
     }
     
     // build document to a suite
@@ -117,22 +122,19 @@ export function gotoVariableDefinition(resolve, reject, targetVariable : string,
     }
 
     // search in suite variable table
-    let location : Location = searchVarInVariableTable(targetVariable, suite);
-    if (location) {
-        globalVariableCacheSet.AddItemToTargetSet(targetVariable, location);
-        console.log(targetVariable + " is matched in variable table");
-        return resolve(location);
-    } else {
-        // search in suite resource table
-        location = searchVarInResourceTable(targetVariable, suite);
+    let searchFunctions : Function[] = [searchVarInVariableTable, searchVarInResourceTable];
+    let location : Location = null;
+    for (let searchFunction of searchFunctions) {
+        location = searchFunction(targetVariable, suite);
         if (location) {
-            globalVariableCacheSet.AddItemToTargetSet(targetVariable, location);
-            console.log(targetVariable + " is matched in resource table")
+            if (usingCache) {
+                globalVariableCacheSet.AddItemToTargetSet(targetVariable, location);
+            }
             return resolve(location);
         }
     }
-    console.log(`the keyword ${targetVariable} doesn't match anywhere`)
-    return reject(`can't find the definition of "${targetVariable}"`);    
+    console.log(`the variable ${targetVariable} doesn't match anywhere`)
+    return reject(`can't find the definition of "${targetVariable}`);
 }
 
 /**
@@ -143,9 +145,11 @@ export function gotoVariableDefinition(resolve, reject, targetVariable : string,
  *     targetKeyword -- the keyword that we want to search
  *     filePath -- where is the targetKeyword appears.
  */
-export function gotoKeywordDefinition(resolve, reject, targetKeyword : string, filePath : string) {  
-    if (globalKeywordCacheSet.IsTargetInCache(targetKeyword)) {
-        return resolve(globalKeywordCacheSet.GetTargetLocation(targetKeyword));
+export function gotoKeywordDefinition(resolve, reject, targetKeyword : string, filePath : string, usingCache=false) {
+    if (usingCache) {
+        if (globalKeywordCacheSet.IsTargetInCache(targetKeyword)) {
+            return resolve(globalKeywordCacheSet.GetTargetLocation(targetKeyword));
+        }
     }
     
     //  build document to a suite (complete)
@@ -156,29 +160,17 @@ export function gotoKeywordDefinition(resolve, reject, targetKeyword : string, f
 
     //  search in suite keywords table
     let location : Location = searchInKeywordTable(targetKeyword, suite);
-    if (location) {
-        globalKeywordCacheSet.AddItemToTargetSet(targetKeyword, location);
-        console.log(targetKeyword + " is matched in keyword table")
-        return resolve(location);
-    }
-    else {
-        // search in suite library table
-        location = searchInLibraryTable(targetKeyword, suite);
+    let searchFunctions : Function[] = [searchInKeywordTable, searchInLibraryTable, searchInResourceTable];
+    for (let searchFunction of searchFunctions) {
+        location = searchFunction(targetKeyword, suite);
         if (location) {
-            globalKeywordCacheSet.AddItemToTargetSet(targetKeyword, location);
-            console.log(targetKeyword + " is matched in library table")
+            if (usingCache) {
+                globalKeywordCacheSet.AddItemToTargetSet(targetKeyword, location);
+            }
             return resolve(location);
         }
-        else {
-            // search in suite resource table
-            location = searchInResourceTable(targetKeyword, suite);
-            if (location) {
-                globalKeywordCacheSet.AddItemToTargetSet(targetKeyword, location);
-                console.log(targetKeyword + " is matched in resource table")
-                return resolve(location);
-            }
-        }
     }
+
     console.log(`the keyword ${targetKeyword} doesn't match anywhere`)
     reject(`can't find the definition of "${targetKeyword}"`);    
 }

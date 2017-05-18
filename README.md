@@ -1,11 +1,11 @@
 ## Features
 1. Gramma highlight
 2. User defined keyword Goto definition
-![](gifs/goto_keyword_definition.gif)
+![goto_keyword_definition](gifs/goto_keyword_definition.gif)
 3. User defined library Goto definition
-![](gifs/goto_function_definition.gif)
+![goto_function_definition](gifs/goto_function_definition.gif)
 4. User defined variable Goto definition
-![](gifs/goto_variable_definition.gif)
+![goto_variable_definition](gifs/goto_variable_definition.gif)
 
 ## Requirements
 User define system environment variable *PY_SITE_PATH*, which indicate the site package path, for example, if your python site package is located in C:\Python27\Lib\Site-Packages.  

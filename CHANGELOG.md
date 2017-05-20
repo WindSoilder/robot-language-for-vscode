@@ -3,6 +3,10 @@
 - Support builtin keyword syntax highlight
 - Support variable support analyze
 
+## 0.2.7 - xxxx-xx-xx
+### Fixed
+- Goto definition runs failed when the resource file is writed as absolute path
+
 ## 0.2.6 - 2017-05-18
 ### Fixed
 - Fix goto definition runs failure when user modify test case file and run search

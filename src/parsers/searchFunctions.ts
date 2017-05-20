@@ -95,7 +95,13 @@ export function searchInResourceTable(targetKeyword : string, sourceSuite : Test
     // the filePath need to be compatible with different systems :(
 
     for (let resource of sourceSuite.resourceMetaDatas) {
-        let targetPath = path.join(currentPath, resource.dataValue);
+        let targetPath : string = null;
+        if (path.isAbsolute(resource.dataValue)) {
+            targetPath = resource.dataValue;
+        } else {
+            targetPath = path.join(currentPath, resource.dataValue);
+        }
+
         console.log("in for loop in search in resource table:" + targetPath);
 
         if (visitedResourceSet.has(targetPath)) {

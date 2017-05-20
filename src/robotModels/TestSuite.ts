@@ -1,6 +1,7 @@
 import {Uri} from 'vscode';
 import {Keyword} from './Keyword';
 import {Variable} from './Variable';
+import {TestCase} from './TestCase';
 import {LibraryMetaData, ResourceMetaData} from './MetaData'; 
 
 /**
@@ -20,6 +21,8 @@ export class TestSuite {
     private _keywords : Keyword[];
     // represent variable table in suite
     private _variables : Variable[];
+    // represent test case table in suite
+    private _testCases : TestCase[];
     // represent source filename
     private _source : Uri;    
 
@@ -28,6 +31,7 @@ export class TestSuite {
         this.resourceMetaDatas = [];
         this.keywords = [];
         this.variables = [];
+        this.testCases = [];
         this.source = sou;
     }
 
@@ -43,6 +47,9 @@ export class TestSuite {
     get variables() : Variable[] { return this._variables; }
     set variables(value : Variable[]) { this._variables = value; }
     
+    get testCases() : TestCase[] { return this._testCases; }
+    set testCases(value : TestCase[]) { this._testCases = value; }
+
     get source() : Uri { return this._source; }
     set source(value : Uri) { this._source = value; }
 }

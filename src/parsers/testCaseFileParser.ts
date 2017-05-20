@@ -3,6 +3,7 @@ import {TextDocument, Uri} from 'vscode';
 import {TestSuite} from '../robotModels/TestSuite';
 import {KeywordTablePopulator} from '../populators/keywordTablePopulator';
 import {SettingTablePopulator} from '../populators/settingTablePopulator';
+import {TestCaseTablePopulator} from '../populators/testcaseTablePopulator';
 import {VariableTablePopulator} from '../populators/variableTablePopulator';
 
 /**
@@ -41,7 +42,8 @@ export function buildFileToSuite(filePath : string) : TestSuite {
             } else if(-1 != TestSuite.testcase_table_names.indexOf(header)) {
                 // the header is legal but we are not concern for it
                 // we are not concern about Variable table and TestCase table
-                currentLineNumber++;
+                ++currentLineNumber;
+                currentLineNumber = TestCaseTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
             } else {
                 // the header name is illegal, so parse should failed.
                 return null;

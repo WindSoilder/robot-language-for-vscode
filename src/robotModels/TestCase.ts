@@ -14,7 +14,11 @@ export class TestCase {
      */
     private _startLine : Number;
     private _endLine : Number;
-    private _variables : Set<Variable>;
+
+    // cause that ES don't support Set for define custom equal function
+    // to indicate that two objects are equal, so I have to throw out
+    // variable name to be the key of map, and map it to actual Variable Object
+    private _variables : Map<string, Variable>;
     private _testname : string;
 
     public get startLine() : Number { return this._startLine; }
@@ -23,13 +27,13 @@ export class TestCase {
     public get endLine() : Number { return this._endLine; }
     public set endLine(value : Number) { this._endLine = value; }
 
-    public get variables() : Set<Variable> { return this._variables; }
-    public set variables(value : Set<Variable>) { this._variables = value; }
+    public get variables() : Map<string, Variable> { return this._variables; }
+    public set variables(value : Map<string, Variable>) { this._variables = value; }
 
     public get testname() : string { return this._testname; }
     public set testname(value : string) { this._testname = value; }
     
     public constructor() {
-        this.variables = new Set<Variable>();
+        this.variables = new Map<string, Variable>();
     }
 }

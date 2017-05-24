@@ -28,8 +28,8 @@ export function buildFileToSuite(filePath : string) : TestSuite {
         if (match) {
             let header : string = match[1].trim();
 
-            // if the header is keyword or setting
-            // then feed the header to target suite 
+            // if the header is leagal table
+            // then feed the header to target suite
             if (-1 != TestSuite.keyword_table_names.indexOf(header)) {
                 ++currentLineNumber; 
                 currentLineNumber = KeywordTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
@@ -40,8 +40,6 @@ export function buildFileToSuite(filePath : string) : TestSuite {
                 ++currentLineNumber;
                 currentLineNumber = VariableTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
             } else if(-1 != TestSuite.testcase_table_names.indexOf(header)) {
-                // the header is legal but we are not concern for it
-                // we are not concern about Variable table and TestCase table
                 ++currentLineNumber;
                 currentLineNumber = TestCaseTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
             } else {

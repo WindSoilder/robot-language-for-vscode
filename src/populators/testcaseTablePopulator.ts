@@ -10,9 +10,9 @@ export class TestCaseTablePopulator {
      {
          let currentLineNumber : number = startLine;
          let lineCount : number = lineContentList.length;
-         let endPattern = new RegExp("\*\*\*(.*)\*\*\*");
+         let endPattern = new RegExp("\\*\\*\\*(.*)\\*\\*\\*");
          // match for the test case name
-         let testCaseNamePattern = /^(\S+ )+.*/i;
+         let testCaseNamePattern : RegExp = /^(\S+ )+.*/i;
 
          while (currentLineNumber < lineCount) {
              let currentLine : string = lineContentList[currentLineNumber];
@@ -24,10 +24,11 @@ export class TestCaseTablePopulator {
                  currentLineNumber = TestCaseTablePopulator.populateLocalVarToTestCase(lineContentList, currentLineNumber, tc);
                  suite.testCases.push(tc);                 
              } else {
-                 // may meed empty line between test case
-                 ++currentLineNumber
+                 // may meet empty line between test case
+                 ++currentLineNumber;
              }
          }
+         return currentLineNumber;
      }
 
      // feed documents local variables, startline and endline to TestCase
@@ -45,7 +46,7 @@ export class TestCaseTablePopulator {
 
           // match for function return value in test case table like
           //     ${variable} =     this is a func    ${arg1}
-          let retVarPattern = /^(\t{1,}|\s{2,})\$\{(.+)\} = (\S+ )*(\S+ )/i;
+          let retVarPattern = /^(\t{1,}|\s{2,})\$\{(.+)\} =(\t{1,}|\s{2,})(\S+ )*(\S+ )/i;
           // match for body in test case
           // it's started with 2 or spaces or 1 or more tabs
           //     this is a keyword    ${arg}
@@ -54,10 +55,13 @@ export class TestCaseTablePopulator {
           while (lineContentList[currentLineNumber].match(testCaseBodyPattern)) {
               let varAssignMatch = lineContentList[currentLineNumber].match(retVarPattern);
               if (varAssignMatch) {
-                  let v : Variable = new Variable(currentLineNumber, varAssignMatch[2]);
+                  let variableName : string = varAssignMatch[2];
+                  let v : Variable = new Variable(currentLineNumber, variableName);
+                  testCase.variables.set(variableName, v);
               }
               ++currentLineNumber;
           }
-
+          testCase.endLine = currentLineNumber;
+          return currentLineNumber;
      }
 }

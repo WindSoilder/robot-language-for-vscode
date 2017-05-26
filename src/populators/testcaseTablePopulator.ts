@@ -12,7 +12,7 @@ export class TestCaseTablePopulator {
          let lineCount : number = lineContentList.length;
          let endPattern = new RegExp("\\*\\*\\*(.*)\\*\\*\\*");
          // match for the test case name
-         let testCaseNamePattern : RegExp = /^(\S+ )+.*/i;
+         let testCaseNamePattern : RegExp = /^(\S+).*/i;
 
          while (currentLineNumber < lineCount) {
              let currentLine : string = lineContentList[currentLineNumber];
@@ -52,7 +52,8 @@ export class TestCaseTablePopulator {
           //     this is a keyword    ${arg}
           let testCaseBodyPattern = /^(\t{1,}|\s{2,}).*/i;
 
-          while (lineContentList[currentLineNumber].match(testCaseBodyPattern)) {
+          while (currentLineNumber < lineCount &&
+                 lineContentList[currentLineNumber].match(testCaseBodyPattern)) {
               let varAssignMatch = lineContentList[currentLineNumber].match(retVarPattern);
               if (varAssignMatch) {
                   let variableName : string = varAssignMatch[2];

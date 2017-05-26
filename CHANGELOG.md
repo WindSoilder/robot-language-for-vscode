@@ -2,6 +2,7 @@
 - Support goto variable definition, the variable is defined by Set Variable keyword
 - Support builtin keyword syntax highlight
 - Support variable support analyze
+- Support robot list variable and dict variable analyze
 
 ## 0.2.7 - xxxx-xx-xx
 ### Fixed

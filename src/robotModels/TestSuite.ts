@@ -22,6 +22,8 @@ export class TestSuite {
     // represent variable table in suite
     private _variables : Variable[];
     // represent test case table in suite
+    // due to it's build process, we can assume that
+    // these test cases are sorted by their startLine(or endLine)
     private _testCases : TestCase[];
     // represent source filename
     private _source : Uri;    
@@ -52,4 +54,49 @@ export class TestSuite {
 
     get source() : Uri { return this._source; }
     set source(value : Uri) { this._source = value; }
+
+    /**
+     * give specific line in the document, locate the actual test case in the suite object
+     * @param cursorLine the line of document we used for locate test case index
+     */
+    public locateToTestCase(cursorLine : number) : TestCase {
+        let currentTestIndex : number = this.locateToTestCaseIndex(cursorLine);
+
+        return this.testCases[currentTestIndex];
+    }
+
+    /**
+     * give specific line in the document, locate the index of test case in the suite object
+     * @param cursorLine the line of document we used for locate test case index
+     * @return -1 if search failed, or return the index of test case we can located for
+     */
+    public locateToTestCaseIndex(cursorLine : number) : number {
+        function binarySearch(sortedNumber : number[]) : number {
+            let max : number = sortedNumber.length;
+            let min : number = 0;
+            while (min < max) {
+                let mid : number = (max - min) / 2;
+
+            }
+        }
+
+        let sortedStartLine : number[] = this.testCases.map(function(tc : TestCase) {
+            return tc.startLine;
+        });
+        let startLineEndLinePair : number[][] = this.testCases.map(function(tc : TestCase) {
+            return [tc.startLine, tc.endLine];
+        });
+
+        let resultIndex : number = binarySearch(sortedStartLine);
+        if (resultIndex != -1) {
+            let startLine : number = startLineEndLinePair[resultIndex][0];
+            let endLine : number = startLineEndLinePair[resultIndex][1];
+            if (cursorLine >= startLine && cursorLine < endLine) {
+                return resultIndex;
+            } else {
+                return -1;
+            }
+        }
+
+    }
 }

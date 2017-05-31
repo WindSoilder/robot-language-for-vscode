@@ -12,8 +12,8 @@ export class TestCase {
      * it represent the TestCase body line range in TestSuite
      * and the range is include startLine, not include endLine, in math, it's [startLine, endLine)
      */
-    private _startLine : Number;
-    private _endLine : Number;
+    private _startLine : number;
+    private _endLine : number;
 
     // cause that ES don't support Set for define custom equal function
     // to indicate that two objects are equal, so I have to throw out
@@ -21,11 +21,11 @@ export class TestCase {
     private _variables : Map<string, Variable>;
     private _testname : string;
 
-    public get startLine() : Number { return this._startLine; }
-    public set startLine(value : Number) { this._startLine = value; }
+    public get startLine() : number { return this._startLine; }
+    public set startLine(value : number) { this._startLine = value; }
 
-    public get endLine() : Number { return this._endLine; }
-    public set endLine(value : Number) { this._endLine = value; }
+    public get endLine() : number { return this._endLine; }
+    public set endLine(value : number) { this._endLine = value; }
 
     public get variables() : Map<string, Variable> { return this._variables; }
     public set variables(value : Map<string, Variable>) { this._variables = value; }
@@ -35,5 +35,25 @@ export class TestCase {
     
     public constructor() {
         this.variables = new Map<string, Variable>();
+    }
+
+    /**
+     * judge if a specifiec variable is in the test case object
+     * @param variableName the variable name that we want to search
+     */
+    private containsVariable(variableName : string) : boolean {
+         return this.variables.has(variableName);
+    }
+
+    /**
+     * get Variable object from the inner object, and we can use this object to get it's defined location
+     * @param variableName the variable name that we want to get
+     */
+    public getVariable(variableName : string) : Variable {
+         if (this.containsVariable(variableName)) {
+             return this.variables.get(variableName);
+         } else {
+             return null;
+         }
     }
 }

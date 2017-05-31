@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import {Location, Position, Uri, TextDocument} from 'vscode';
 import {TestSuite} from '../robotModels/TestSuite';
 import {Keyword} from '../robotModels/Keyword';
+import {TestCase} from '../robotModels/TestCase';
+import {Variable} from '../robotModels/Variable';
 import {buildFileToSuite} from './testCaseFileParser';
 
 // these two set are use for get rid of infinite library or resource search
@@ -128,6 +130,25 @@ export function searchInResourceTable(targetKeyword : string, sourceSuite : Test
             }
         }
     } // end for (let resource of suite.resourceMetaDatas)
+}
+
+/**
+ * search variable in the testSuite's TestCase, which may define dynamic variable
+ * @param targetVariable the variable that we want to located
+ * @param sourceSuite testSuite we use for location
+ * @param cursorLine  the line of targetVariable in the document, it's helpful to locate where the testcase it's located in
+ */
+export function searchVarInLocalTestCase(targetVariable : string, sourceSuite : TestSuite, cursorLine : number) : Location
+{
+    let currentTestCase : TestCase = sourceSuite.locateToTestCase(cursorLine);
+
+    let v : Variable = currentTestCase.getVariable(targetVariable);
+    if (v != null) {
+        return new Location(sourceSuite.source,
+                            v.position);
+    } else {
+        return null;
+    }
 }
 
 export function searchVarInVariableTable(targetVariable : string, sourceSuite : TestSuite) : Location {

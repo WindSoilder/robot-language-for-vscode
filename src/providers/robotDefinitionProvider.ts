@@ -2,7 +2,7 @@ import {DefinitionProvider, TextDocument, Position, CancellationToken, Location,
 import {buildFileToSuite} from '../parsers/testCaseFileParser';
 import {TestSuite} from '../robotModels/TestSuite';
 import {searchInKeywordTable, searchInLibraryTable, searchInResourceTable, initializeVisitedSet,
-    initializeVarVisitedSet, searchVarInVariableTable, searchVarInResourceTable} from '../parsers/searchFunctions';
+    initializeVarVisitedSet, searchVarInVariableTable, searchVarInResourceTable, searchVarInLocalTestCase} from '../parsers/searchFunctions';
 import {globalKeywordCacheSet, globalVariableCacheSet} from '../caches/CacheItem';
 
 
@@ -26,7 +26,7 @@ export class RobotDefinitionProvider implements DefinitionProvider {
 
         if (isVariableSyntax(targetKeyword)) {
             return new Promise<Location>((resolve, reject) => {
-                gotoVariableDefinition(resolve, reject, targetKeyword, filePath);
+                gotoVariableDefinition(resolve, reject, targetKeyword, filePath, position.line);
             });
         }
         else {
@@ -107,8 +107,9 @@ function isVariableSyntax(checkedStr : string) : boolean {
  *     reject  -- a function, when the search is failed, this function should be invoked, the function argument is a string named reason.
  *     targetVariable -- the variable that we want to search
  *     filePath -- where is the targetVariable appears.
+ *     cursorLine -- the line which cursor located, it's mainly used for local variable definition
  */
-export function gotoVariableDefinition(resolve, reject, targetVariable : string, filePath : string, usingCache = false) {
+export function gotoVariableDefinition(resolve, reject, targetVariable : string, filePath : string, cursorLine : number, usingCache = false) {
     if (usingCache) {
         if (globalVariableCacheSet.IsTargetInCache(targetVariable)) {
             return resolve(globalVariableCacheSet.GetTargetLocation(targetVariable));
@@ -121,16 +122,24 @@ export function gotoVariableDefinition(resolve, reject, targetVariable : string,
         reject(`the file ${filePath} is not existed`);
     }
 
-    // search in suite variable table
-    let searchFunctions : Function[] = [searchVarInVariableTable, searchVarInResourceTable];
+    // search in suite testcase table
     let location : Location = null;
-    for (let searchFunction of searchFunctions) {
-        location = searchFunction(targetVariable, suite);
-        if (location) {
-            if (usingCache) {
-                globalVariableCacheSet.AddItemToTargetSet(targetVariable, location);
+    location = searchVarInLocalTestCase(targetVariable, suite, cursorLine);
+    if (location) {
+        return resolve(location);
+    }
+    else {
+        // search in suite variable table and resource table
+        let searchFunctions : Function[] = [searchVarInVariableTable, searchVarInResourceTable];
+
+        for (let searchFunction of searchFunctions) {
+            location = searchFunction(targetVariable, suite);
+            if (location) {
+                if (usingCache) {
+                    globalVariableCacheSet.AddItemToTargetSet(targetVariable, location);
+                }
+                return resolve(location);
             }
-            return resolve(location);
         }
     }
     console.log(`the variable ${targetVariable} doesn't match anywhere`)

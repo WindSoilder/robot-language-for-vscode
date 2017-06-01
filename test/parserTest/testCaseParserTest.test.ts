@@ -127,11 +127,11 @@ suite("File Builder Test", () => {
         let caseNumber : number = 4;
         assert.equal(suite.testCases.length, caseNumber);
         assert.equal(suite.testCases[0].startLine, 1);
-        assert.equal(suite.testCases[0].endLine, 4);
+        assert.equal(suite.testCases[0].endLine, 5);
         assert.equal(suite.testCases[0].variables.size, 1);
 
         assert.equal(suite.testCases[1].startLine, 5);
-        assert.equal(suite.testCases[1].endLine, 8);
+        assert.equal(suite.testCases[1].endLine, 10);
         assert.equal(suite.testCases[1].variables.size, 2);
 
         assert.equal(suite.testCases[2].startLine, 11);

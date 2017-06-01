@@ -35,3 +35,9 @@ The gramma don't support highlight robot builtin keyword yet.
 
 ### 0.1.0
 Some function include read file is implemented in sync way, so there may have be blocked if you using goto definition in a very big test case file or a resource file.  These functions may be fixed to active async way in later version.
+
+### 0.2.1
+Support goto variable definietion
+
+### 0.2.7
+Support variable scrope analyze

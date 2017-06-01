@@ -61,8 +61,11 @@ export class TestSuite {
      */
     public locateToTestCase(cursorLine : number) : TestCase {
         let currentTestIndex : number = this.locateToTestCaseIndex(cursorLine);
-
-        return this.testCases[currentTestIndex];
+        if (currentTestIndex != -1) {
+            return this.testCases[currentTestIndex];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -71,13 +74,34 @@ export class TestSuite {
      * @return -1 if search failed, or return the index of test case we can located for
      */
     public locateToTestCaseIndex(cursorLine : number) : number {
+        /**
+         * using binary search to search target number, if it's not in the array
+         * then return an index which indicate the number to insert
+         * e.g: search 6 in [1, 3, 4, 7]
+         *      will return 3
+         */
         function binarySearch(sortedNumber : number[]) : number {
-            let max : number = sortedNumber.length;
+            let max : number = sortedNumber.length - 1;
             let min : number = 0;
-            while (min < max) {
-                let mid : number = (max - min) / 2;
-
+            while (min <= max) {
+                let mid : number = Math.ceil((max + min) / 2);
+                if (sortedNumber[mid] == cursorLine) {
+                    return mid;
+                } else if (sortedNumber[mid] > cursorLine) {
+                    max = mid - 1;
+                } else {
+                    min = mid + 1;
+                }
             }
+            return min;
+        }
+
+        /**
+         * return true if the cursorLine is over flow the whole testCase table
+         */
+        function isCursorLineOverFlow() : boolean {
+            return cursorLine < sortedStartLine[0] ||
+                   cursorLine >= startLineEndLinePair[startLineEndLinePair.length - 1][1];
         }
 
         let sortedStartLine : number[] = this.testCases.map(function(tc : TestCase) {
@@ -87,8 +111,10 @@ export class TestSuite {
             return [tc.startLine, tc.endLine];
         });
 
-        let resultIndex : number = binarySearch(sortedStartLine);
-        if (resultIndex != -1) {
+        if (isCursorLineOverFlow()) {
+            return -1;
+        } else {
+            let resultIndex : number = binarySearch(sortedStartLine) - 1;
             let startLine : number = startLineEndLinePair[resultIndex][0];
             let endLine : number = startLineEndLinePair[resultIndex][1];
             if (cursorLine >= startLine && cursorLine < endLine) {
@@ -97,6 +123,5 @@ export class TestSuite {
                 return -1;
             }
         }
-
     }
 }

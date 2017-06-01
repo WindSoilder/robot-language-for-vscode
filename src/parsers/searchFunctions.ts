@@ -145,7 +145,7 @@ export function searchVarInLocalTestCase(targetVariable : string, sourceSuite : 
     let v : Variable = currentTestCase.getVariable(targetVariable);
     if (v != null) {
         return new Location(sourceSuite.source,
-                            v.position);
+                            new Position(v.position, 0));
     } else {
         return null;
     }

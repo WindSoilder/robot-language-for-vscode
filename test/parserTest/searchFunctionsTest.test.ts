@@ -5,7 +5,7 @@ import {Location, Position, Uri} from 'vscode';
 import * as path from 'path';
 
 import {searchInKeywordTable, searchInLibraryTable, searchInResourceTable, initializeVisitedSet,
-        initializeVarVisitedSet, searchVarInVariableTable, searchVarInResourceTable} from '../../src/parsers/searchFunctions';
+        initializeVarVisitedSet, searchVarInVariableTable, searchVarInResourceTable, searchVarInLocalTestCase} from '../../src/parsers/searchFunctions';
 import {TestSuite} from '../../src/robotModels/TestSuite';
 import {Keyword} from '../../src/robotModels/Keyword';
 import {LibraryMetaData, ResourceMetaData} from '../../src/robotModels/MetaData';
@@ -119,6 +119,34 @@ suite("search functions tests", () => {
             initializeVarVisitedSet();
             let loc : Location = searchVarInResourceTable(testVarNames[index], suite);
             assertLocationEqual(loc, expectLocations[index], "searchVarInResourceTable");
+        }
+    });
+
+    test("varSearchInLocalTestCase function test", () => {
+        let testVarNames : string[] = [
+            "${localVariable}",
+            "${localVariable}", "${anotherVariable}",
+            "${wasSetInVarTable}"
+        ];
+
+        let testCursorLine : number[] = [
+            4,
+            8, 9,
+            13
+        ];
+        let expectResourceUri : Uri = Uri.file(testFileAbsPath("testLocalVariable.txt"));
+        let expectLocations : Location[] = [
+            new Location(expectResourceUri, new Position(3, 0)),
+            new Location(expectResourceUri, new Position(6, 0)),
+            new Location(expectResourceUri, new Position(7, 0)),
+            new Location(expectResourceUri, new Position(12, 0))
+        ];
+
+        let suite : TestSuite = getSuiteFromFileName("testLocalVariable.txt");
+
+        for (let index in testVarNames) {
+            let loc : Location = searchVarInLocalTestCase(testVarNames[index], suite, testCursorLine[index]);
+            assertLocationEqual(loc, expectLocations[index], "searchVarInLocalTestCase");
         }
     });
 });

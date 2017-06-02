@@ -1,7 +1,14 @@
 ## [Unreleased]
-- Support goto variable definition, the variable is defined by Set Variable keyword
 - Support builtin keyword syntax highlight
-- Support variable support analyze
+- Support robot list variable and dict variable analyze
+- Support linux system
+
+## 0.2.7 - 2017-06-02
+### Added
+- Support variable scope analyze, what means that if a variable is defined dynamic, and goto variable definition will return that variable, and it has higher priority than which is defined in Variable Table
+
+### Fixed
+- Goto definition runs failed when the resource file is writed as absolute path
 
 ## 0.2.6 - 2017-05-18
 ### Fixed

@@ -22,9 +22,21 @@ export class MetaData {
     set dataValue(value: string) { this._dataValue = value; }
 }
 
+/**
+ * LibraryMetaData represent libraries in a test suite
+ * it appears like this:
+ * *** Settings ***
+ * Library    a.b.c.d
+ */
 export class LibraryMetaData extends MetaData {
 
 }
 
+/**
+ * ResourceMetaData represent resources in a test suite
+ * it appears like this:
+ * *** Settings ***
+ * Resource    test_resource.txt
+ */
 export class ResourceMetaData extends MetaData {
 }

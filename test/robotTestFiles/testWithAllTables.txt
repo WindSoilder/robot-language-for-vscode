@@ -1,6 +1,5 @@
 *** Settings ***
 Resource          ../test_resource
-Re
 
 *** Variables ***
 ${testAttrName}    robotExtensionTestAttrName

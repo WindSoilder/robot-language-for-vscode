@@ -58,8 +58,14 @@ export class TestSuite {
     /**
      * give specific line in the document, locate the actual test case in the suite object
      * @param cursorLine the line of document we used for locate test case index
+     * @return The TestCase object to sea
      */
     public locateToTestCase(cursorLine : number) : TestCase {
+        // no test case in the current test suite, just return null
+        if (this.testCases.length == 0)
+        {
+            return null;
+        }
         let currentTestIndex : number = this.locateToTestCaseIndex(cursorLine);
         if (currentTestIndex != -1) {
             return this.testCases[currentTestIndex];

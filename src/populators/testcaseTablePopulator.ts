@@ -46,7 +46,7 @@ export class TestCaseTablePopulator {
 
           // match for function return value in test case table like
           //     ${variable} =     this is a func    ${arg1}
-          let retVarPattern = /^(\t{1,}|\s{2,})(\$\{.+\}) =(\t{1,}|\s{2,})(\S+ )*(\S+ )/i;
+          let retVarPattern = /^(\t{1,}|\s{2,})(\$\{.+\})\s{0,1}=(\t{1,}|\s{2,})(\S+ )*(\S+ )/i;
           // match for body in test case
           // it's started with 2 or spaces or 1 or more tabs
           //     this is a keyword    ${arg}

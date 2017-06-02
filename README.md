@@ -6,6 +6,8 @@
 ![goto_function_definition](gifs/goto_function_definition.gif)
 4. User defined variable Goto definition
 ![goto_variable_definition](gifs/goto_variable_definition.gif)
+5. Variable scope support, if a variable is defined dynamically in test case, and it will goto the right place
+![goto_localvariable_definition](gifs/goto_localvariable_definition.gif)
 
 ## Requirements
 User define system environment variable *PY_SITE_PATH*, which indicate the site package path, for example, if your python site package is located in C:\Python27\Lib\Site-Packages.  

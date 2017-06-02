@@ -3,7 +3,7 @@
 - Support robot list variable and dict variable analyze
 - Support linux system
 
-## 0.2.7 - 2017-06-01
+## 0.2.7 - 2017-06-02
 ### Added
 - Support variable scope analyze, what means that if a variable is defined dynamic, and goto variable definition will return that variable, and it has higher priority than which is defined in Variable Table
 

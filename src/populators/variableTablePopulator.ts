@@ -15,7 +15,9 @@ export class VariableTablePopulator {
             
              // match for keyword definition in variable table
              // ${variable}    value
-             let variablePattern = /^(\$\{.+\})(\t{1,}|\s{2,})(.*)/i;
+             // @{listVariable}    value1    value2
+             // &{dictVariable}    name=1    age=3
+             let variablePattern = /^((\$|@|\&)\{.+\})(\t{1,}|\s{2,})(.*)/i;
              if (currentLine.match(endPattern)) {
                  return currentLineNumber;
              } else {

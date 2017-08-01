@@ -14,9 +14,11 @@ export function buildFileToSuite(filePath : string) : TestSuite {
     if (!fs.existsSync(filePath)) {
         return null;
     }
+
     let fileContent : string = fs.readFileSync(filePath).toString();
     // in windows, lines is split by \r\n, but in linux, it's split by \n
-    let lineContentList : string[] = fileContent.split('\r\n');  
+    // so use a regex to match both \r, \n, \r\n
+    let lineContentList : string[] = fileContent.split(/\r?\n/);
     let lineCount : number = lineContentList.length;
     let currentLineNumber : number = 0;
     let targetSuite : TestSuite = new TestSuite(Uri.file(filePath));
@@ -30,20 +32,11 @@ export function buildFileToSuite(filePath : string) : TestSuite {
 
             // if the header is leagal table
             // then feed the header to target suite
-            if (-1 != TestSuite.keyword_table_names.indexOf(header)) {
-                ++currentLineNumber; 
-                currentLineNumber = KeywordTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
-            } else if (-1 != TestSuite.setting_table_names.indexOf(header)) {
+            let populatorClass = getPopulatorThroughHeader(header);
+            if (populatorClass) {
                 ++currentLineNumber;
-                currentLineNumber = SettingTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
-            } else if (-1 != TestSuite.variable_table_names.indexOf(header)) {
-                ++currentLineNumber;
-                currentLineNumber = VariableTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
-            } else if(-1 != TestSuite.testcase_table_names.indexOf(header)) {
-                ++currentLineNumber;
-                currentLineNumber = TestCaseTablePopulator.populate(lineContentList, currentLineNumber, targetSuite);
+                currentLineNumber = populatorClass.populate(lineContentList, currentLineNumber, targetSuite);
             } else {
-                // the header name is illegal, so parse should failed.
                 return null;
             }
         } // end if (match)
@@ -52,4 +45,20 @@ export function buildFileToSuite(filePath : string) : TestSuite {
         }
     }
     return targetSuite;
+}
+
+function getPopulatorThroughHeader(header : string)
+{
+    if (-1 != TestSuite.keyword_table_names.indexOf(header)) {
+        return KeywordTablePopulator;
+    } else if (-1 != TestSuite.setting_table_names.indexOf(header)) {
+        return SettingTablePopulator;
+    } else if (-1 != TestSuite.variable_table_names.indexOf(header)) {
+        return VariableTablePopulator;
+    } else if(-1 != TestSuite.testcase_table_names.indexOf(header)) {
+        return TestCaseTablePopulator;
+    } else {
+        // the header name is illegal, so parse should failed.
+        return null;
+    }
 }

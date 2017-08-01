@@ -15,7 +15,7 @@ export class RobotDefinitionProvider implements DefinitionProvider {
         initializeVarVisitedSet();
 
         // the filePath need to be compatible with different systems :(
-        let filePath = document.uri.path.replace('/', '');
+        let filePath = document.uri.fsPath;
          
         // 1. find the whole keyword that we want to search
         // debug
@@ -93,7 +93,8 @@ export function foundKeywordInCurrentLine(src : string, character : string, colu
  * or return null.
  */
 function isVariableSyntax(checkedStr : string) : boolean {
-    if (checkedStr.match(/(\$\{.+\})/)) {
+    // match for something like ${..}, &{..} or @{..}
+    if (checkedStr.match(/((\$|@|\&)\{.+\})/)) {
         return true;
     } else {
         return false;

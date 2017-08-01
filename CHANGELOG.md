@@ -1,7 +1,18 @@
 ## [Unreleased]
 - Support builtin keyword syntax highlight
+
+## 0.2.8 - xxxx-xx-xx
+### Added
+- Add support for .robot file
 - Support robot list variable and dict variable analyze
 - Support linux system
+- Gramma highlight for list variable and dict variable
+
+### Removed
+- Remove support for .txt file
+
+### Fixed
+- Fix goto definition runs failed when the test file contains no test cases
 
 ## 0.2.7 - 2017-06-02
 ### Added

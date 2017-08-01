@@ -67,7 +67,7 @@ export function searchInLibraryTable(targetKeyword : string, suite : TestSuite) 
         // open file and search if the target keyword in the buffer     
         let fileContent : string = fs.readFileSync(libraryFullPath).toString();
         let searchPattern = new RegExp(`def ${targetFunc}.*`, "i");
-        let fileLines : string[] = fileContent.split("\r\n"); 
+        let fileLines : string[] = fileContent.split(/\r?\n/);
         let lineCount : number = 0;
         for (let fileLine of fileLines) {
             let match = fileLine.match(searchPattern);
@@ -90,9 +90,7 @@ export function searchInLibraryTable(targetKeyword : string, suite : TestSuite) 
  *     else return null
  */
 export function searchInResourceTable(targetKeyword : string, sourceSuite : TestSuite) : Location {
-    // remove uri path starts with '/'
-    // the uri path is like '/C://test/test2', so we should remove the first '/'
-    let currentPath : string = sourceSuite.source.path.replace('/', '');
+    let currentPath : string = sourceSuite.source.fsPath;
     currentPath = path.dirname(currentPath);
     // the filePath need to be compatible with different systems :(
 
@@ -142,13 +140,13 @@ export function searchVarInLocalTestCase(targetVariable : string, sourceSuite : 
 {
     let currentTestCase : TestCase = sourceSuite.locateToTestCase(cursorLine);
 
-    let v : Variable = currentTestCase.getVariable(targetVariable);
-    if (v != null) {
-        return new Location(sourceSuite.source,
-                            new Position(v.position, 0));
-    } else {
-        return null;
+    if (currentTestCase) {
+        let variable : Variable = currentTestCase.getVariable(targetVariable);
+        if (variable != null) {
+            return new Location(sourceSuite.source, new Position(variable.position, 0));
+        }
     }
+    return null;
 }
 
 export function searchVarInVariableTable(targetVariable : string, sourceSuite : TestSuite) : Location {
@@ -165,7 +163,7 @@ export function searchVarInVariableTable(targetVariable : string, sourceSuite : 
 }
 
 export function searchVarInResourceTable(targetVariable : string, sourceSuite : TestSuite) : Location {
-    let currentPath : string = sourceSuite.source.path.replace('/', '');
+    let currentPath : string = sourceSuite.source.fsPath;
     currentPath = path.dirname(currentPath);
 
     // the filePath need to be compatible with different systems :(
@@ -223,7 +221,7 @@ function getLibraryFullPath(modulePath : string, suite : TestSuite) : string {
  * it doesn't check if the file existed
  */
 function getLibraryFullPathInCurrentDir(modulePath : string, suite : TestSuite) : string {
-   let libraryRootPath : string = path.dirname(suite.source.path.replace('/', ''));
+   let libraryRootPath : string = path.dirname(suite.source.fsPath);
 
    // use for this scenario:
    // library    ../../testLibrary/testmodule.py

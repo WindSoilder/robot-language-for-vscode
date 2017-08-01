@@ -51,7 +51,7 @@
             <key>name</key>
             <string>variable.other.robot</string>
             <key>match</key>
-            <string>\$\{.*?\}</string>
+            <string>(\$|@|\&)\{.*?\}</string>
         </dict>
 
         <dict>

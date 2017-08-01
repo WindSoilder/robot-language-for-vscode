@@ -14,16 +14,16 @@ export class KeywordTablePopulator {
          
          while (currentLineNumber < lineCount) {
              let currentLine : string = lineContentList[currentLineNumber];
-             let endPattern = new RegExp("\\*\\*\\*(.*)\\*\\*\\*");
+             let endPattern : RegExp = new RegExp("\\*\\*\\*(.*)\\*\\*\\*");
              
              // match for keyword definition in keyword table
              // match for: keyword name
-             let keywordPattern = new RegExp("^(\\S+ )*(\\S+)$");
+             let keywordPattern : RegExp = new RegExp("^(\\S+ )*(\\S+)$");
 
              if (currentLine.match(endPattern)) {
                  return currentLineNumber;
              } else {
-                 let keywordMatch = currentLine.match(keywordPattern);
+                 let keywordMatch : RegExpMatchArray = currentLine.match(keywordPattern);
                  if (keywordMatch) {
                      let keyword : Keyword = new Keyword(currentLineNumber, keywordMatch[0]);
                      suite.keywords.push(keyword);

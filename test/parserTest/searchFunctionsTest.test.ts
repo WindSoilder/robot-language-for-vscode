@@ -89,12 +89,13 @@ suite("search functions tests", () => {
 
     test("varSearchInVariableTable function test", () => {
         let testVarNames : string[] = [
-            "${testVar1}", "${test Var 2}"
+            "${testVar1}", "${test Var 2}", "@{listVar}"
         ];
         let expectResourceUri : Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctions.txt"));
         let expectLocations : Location[] = [
             new Location(expectResourceUri, new Position(8, 0)),
-            new Location(expectResourceUri, new Position(9, 0))
+            new Location(expectResourceUri, new Position(9, 0)),
+            new Location(expectResourceUri, new Position(10, 0))
         ];
         let suite : TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
         
@@ -106,12 +107,13 @@ suite("search functions tests", () => {
 
     test("varSearchInResourceTable function test", () => {
         let testVarNames : string[] = [
-            "${testVar3}", "${test Var 4}"
+            "${testVar3}", "${test Var 4}", "&{dictVar}"
         ];
         let expectResourceUri : Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctionsResource.txt"));
         let expectLocations : Location[] = [
             new Location(expectResourceUri, new Position(1, 0)),
-            new Location(expectResourceUri, new Position(2, 0))
+            new Location(expectResourceUri, new Position(2, 0)),
+            new Location(expectResourceUri, new Position(3, 0))
         ]
         let suite : TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
 

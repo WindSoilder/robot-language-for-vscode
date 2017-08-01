@@ -1,7 +1,7 @@
 ## [Unreleased]
 - Support builtin keyword syntax highlight
 
-## 0.2.8 - xxxx-xx-xx
+## 0.2.8 - 2017-08-02
 ### Added
 - Add support for .robot file
 - Support robot list variable and dict variable analyze

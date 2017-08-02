@@ -1,5 +1,11 @@
 ## [Unreleased]
 - Support builtin keyword syntax highlight
+- Show code completion proposals
+- Show Hovers
+- Help with keyword signatures
+- Find All References to a Symbol
+- Show all symbol definitions within a document
+- Format plain text in an editor
 
 ## 0.2.8 - 2017-08-02
 ### Added

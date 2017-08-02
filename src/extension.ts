@@ -3,6 +3,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import {RobotDefinitionProvider} from './providers/robotDefinitionProvider';
+import {RobotCompletionItemProvider} from './providers/robotCompletionItemProvider';
 
 const ROBOT_MODE: vscode.DocumentFilter = { language: 'robot', scheme: 'file'};
 
@@ -16,8 +17,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     let definitionDispose = vscode.languages.registerDefinitionProvider(
         ROBOT_MODE, new RobotDefinitionProvider());
-            
+
+    let completionItemDispose = vscode.languages.registerCompletionItemProvider(
+        ROBOT_MODE, new RobotCompletionItemProvider());
+
     context.subscriptions.push(definitionDispose);
+    context.subscriptions.push(completionItemDispose);
 }
 
 // this method is called when your extension is deactivated

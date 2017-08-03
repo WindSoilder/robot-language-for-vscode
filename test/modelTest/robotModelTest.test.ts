@@ -12,19 +12,19 @@ import {MetaData, LibraryMetaData, ResourceMetaData} from '../../src/robotModels
 suite("Robot Model Tests", () => {
 
     test("Keyword Test", () => {
-        let testKeywordName : string = "a keyword";
-        let testLineNumber : number = 3;
-        let kw : Keyword = new Keyword(testLineNumber, testKeywordName);
+        let testKeywordName: string = "a keyword";
+        let testLineNumber: number = 3;
+        let kw: Keyword = new Keyword(testLineNumber, testKeywordName);
         assert(kw.name == testKeywordName, "the keyword name does not match what it given!");
         assert(kw.position == testLineNumber, "the position of keyword does not match what it had given!");
     });
 
     test("TestSuite Table Name Test", () => {
         // test if the table names in class TestSuite match robot test table name.
-        let setting_table_names_in_robot : string[] = ['Setting', 'Settings', 'Metadata'];
-        let variable_table_names_in_robot : string[] = ['Variable', 'Variables'];
-        let testcase_table_names_in_robot : string[] = ['Test Case', 'Test Cases'];
-        let keyword_table_names_in_robot : string[] = ['Keyword', 'Keywords', 'User Keyword', 'User Keywords'];
+        let setting_table_names_in_robot: string[] = ['Setting', 'Settings', 'Metadata'];
+        let variable_table_names_in_robot: string[] = ['Variable', 'Variables'];
+        let testcase_table_names_in_robot: string[] = ['Test Case', 'Test Cases'];
+        let keyword_table_names_in_robot: string[] = ['Keyword', 'Keywords', 'User Keyword', 'User Keywords'];
 
         assert(TestSuite.setting_table_names.sort().toString() == setting_table_names_in_robot.sort().toString());
         assert(TestSuite.variable_table_names.sort().toString() == variable_table_names_in_robot.sort().toString());
@@ -38,23 +38,23 @@ suite("Robot Model Tests", () => {
 
     test("MetaData Test", () => {
         // LibraryMetaData and ResourceMetaData test
-        let test_data_type : string = "library";
-        let test_data_value : string = "test.library";
+        let test_data_type: string = "library";
+        let test_data_value: string = "test.library";
 
-        let libraryMetaData : LibraryMetaData = new LibraryMetaData(test_data_type, test_data_value);
+        let libraryMetaData: LibraryMetaData = new LibraryMetaData(test_data_type, test_data_value);
         assert(libraryMetaData.dataType == test_data_type);
         assert(libraryMetaData.dataValue == test_data_value);
 
         test_data_type = "resource";
-        let resourceMetaData : ResourceMetaData = new ResourceMetaData(test_data_type, test_data_value);
+        let resourceMetaData: ResourceMetaData = new ResourceMetaData(test_data_type, test_data_value);
         assert(resourceMetaData.dataType == test_data_type);
         assert(resourceMetaData.dataValue == test_data_value);
     });
 
    test("Variable Test", () => {
         let testVarName: string = "a variable";
-        let testVarNumber : number = 3;
-        let v : Variable = new Variable(testVarNumber, testVarName);
+        let testVarNumber: number = 3;
+        let v: Variable = new Variable(testVarNumber, testVarName);
         assert(v.name == testVarName, "the variable name does not match what it given!");
         assert(v.position == testVarNumber, "the position of variable does not match what it had given!");
    });

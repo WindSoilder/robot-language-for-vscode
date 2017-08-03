@@ -4,13 +4,13 @@ import {Variable} from '../robotModels/Variable';
 export class VariableTablePopulator {
     // feed document's variable table to suite, the content of document is begin with startLine
     // return the next line to search in the document
-    static populate(lineContentList : string[], startLine : number, suite : TestSuite) : number
+    static populate(lineContentList: string[], startLine: number, suite: TestSuite): number
     {
-        let currentLineNumber : number = startLine;
-        let lineCount : number = lineContentList.length;
+        let currentLineNumber: number = startLine;
+        let lineCount: number = lineContentList.length;
 
          while (currentLineNumber < lineCount) {
-             let currentLine : string = lineContentList[currentLineNumber];
+             let currentLine: string = lineContentList[currentLineNumber];
              let endPattern = new RegExp("\\*\\*\\*(.*)\\*\\*\\*");
             
              // match for keyword definition in variable table
@@ -23,7 +23,7 @@ export class VariableTablePopulator {
              } else {
                  let variableMatch = currentLine.match(variablePattern);
                  if (variableMatch) {
-                     let v : Variable = new Variable(currentLineNumber, variableMatch[1]);
+                     let v: Variable = new Variable(currentLineNumber, variableMatch[1]);
                      suite.variables.push(v);
                  } // end if (metaDataMatch)
              } // end else

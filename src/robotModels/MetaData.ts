@@ -8,7 +8,7 @@ export class MetaData {
     private _dataType: string;
     private _dataValue: string;
 
-    public constructor(dType : string, dValue : string) {
+    public constructor(dType: string, dValue: string) {
         this.dataType = dType;
         this.dataValue = dValue;
     }

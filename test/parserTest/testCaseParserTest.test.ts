@@ -15,43 +15,43 @@ import {getSuiteFromFileName} from './parserUtil';
 // all these files used for testing shouldn't be modified or moved
 // or these tests will run failed
 suite("File Builder Test", () => {
-    let resourceSettingValue : string = "../test_resource";
-    let expectedResourceMetaData : ResourceMetaData[] = [new ResourceMetaData("Resource", "../test_resource")];
-    let expectedKeywordNames : string[] = ["keyword one", "keyword two"];
-    let expectedVarNames : string[] = ["${testAttrName}", "${test another attr}"];
+    let resourceSettingValue: string = "../test_resource";
+    let expectedResourceMetaData: ResourceMetaData[] = [new ResourceMetaData("Resource", "../test_resource")];
+    let expectedKeywordNames: string[] = ["keyword one", "keyword two"];
+    let expectedVarNames: string[] = ["${testAttrName}", "${test another attr}"];
 
-    function assertVarTableExisted(suite : TestSuite) {
-        let suiteVarNames : string[] = [];
+    function assertVarTableExisted(suite: TestSuite) {
+        let suiteVarNames: string[] = [];
         for (let v of suite.variables) {
             suiteVarNames.push(v.name);
         }
         assert.equal(suiteVarNames.sort().toString(), expectedVarNames.sort().toString());
     }
 
-    function assertKeywordTableExisted(suite : TestSuite) {
-        let suiteKeywordNames : string[] = [];
+    function assertKeywordTableExisted(suite: TestSuite) {
+        let suiteKeywordNames: string[] = [];
         for (let keyword of suite.keywords) {
             suiteKeywordNames.push(keyword.name);
         }
         assert.equal(suiteKeywordNames.sort().toString(), expectedKeywordNames.sort().toString());
     }
 
-    function assertResourceSettingExisted(suite : TestSuite) {
+    function assertResourceSettingExisted(suite: TestSuite) {
         assert.equal(suite.resourceMetaDatas[0].dataType.toLowerCase(), "Resource".toLowerCase());
         assert.equal(suite.resourceMetaDatas[0].dataValue, resourceSettingValue);
     }
 
-    function assertKeywordTableNotExisted(suite : TestSuite) {
+    function assertKeywordTableNotExisted(suite: TestSuite) {
         assert.equal(suite.keywords.length, 0);
     }
 
-    function assertResourceSettingNotExisted(suite : TestSuite) {
+    function assertResourceSettingNotExisted(suite: TestSuite) {
         assert.equal(suite.resourceMetaDatas.length, 0);
     }
 
     test("test build file with all tables", () => {
-        let fileName : string = "testWithAllTables.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testWithAllTables.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableExisted(suite);
         assertResourceSettingExisted(suite);
@@ -59,72 +59,72 @@ suite("File Builder Test", () => {
     });
 
     test("test build file with only setting table", () => {
-        let fileName : string = "testWithOnlySettingTable.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testWithOnlySettingTable.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
         
         assertKeywordTableNotExisted(suite);
         assertResourceSettingExisted(suite);
     });
 
     test("test build file with only keyword table", () => {
-        let fileName : string = "testWithOnlyKeywordTable.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testWithOnlyKeywordTable.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableExisted(suite);
         assertResourceSettingNotExisted(suite);
     });
 
     test("test build file with setting and testcase table", () => {
-        let fileName : string = "testWithSettingAndTestCaseTable.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testWithSettingAndTestCaseTable.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableNotExisted(suite);
         assertResourceSettingExisted(suite);
     });
 
     test("test build file with setting and keyword table", () => {
-        let fileName : string = "testWithSettingAndKeywordTable.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testWithSettingAndKeywordTable.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableExisted(suite);
         assertResourceSettingExisted(suite);
     });
 
     test("test build file with testcase and keyword table", () => {
-        let fileName : string = "testWithTestCaseAndKeywordTable.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testWithTestCaseAndKeywordTable.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableExisted(suite);
         assertResourceSettingNotExisted(suite);
     });
 
     test("test build file with empty file", () => {
-        let fileName : string = "testWithEmptyFile.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testWithEmptyFile.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableNotExisted(suite);
         assertResourceSettingNotExisted(suite);
     });
 
     test("test build file with illegal syntax", () => {
-        let fileName : string = "testWithIllegalSyntax.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testWithIllegalSyntax.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assert.equal(suite, null, "build suite with illegal syntax should return null");
     });
 
     test("test build file with variable table", () => {
-        let fileName : string = "testWithOnlyVariableTable.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testWithOnlyVariableTable.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertVarTableExisted(suite);
     });
 
     test("test TestCase local variable assignment", () => {
-        let fileName : string = "testLocalVariable.txt";
-        let suite : TestSuite = getSuiteFromFileName(fileName);
+        let fileName: string = "testLocalVariable.txt";
+        let suite: TestSuite = getSuiteFromFileName(fileName);
 
-        let caseNumber : number = 4;
+        let caseNumber: number = 4;
         assert.equal(suite.testCases.length, caseNumber);
         assert.equal(suite.testCases[0].startLine, 1);
         assert.equal(suite.testCases[0].endLine, 5);

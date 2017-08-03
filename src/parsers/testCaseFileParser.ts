@@ -11,14 +11,14 @@ import {VariableTablePopulator} from '../populators/variableTablePopulator';
  * @param filePath the path to build
  * @return TestSuite object, which contains useful information
  */
-export function buildFileToSuiteSync(filePath : string) : TestSuite {
+export function buildFileToSuiteSync(filePath: string): TestSuite {
     // if the file is not existed, we should not open it.  And let user know that
     if (!fs.existsSync(filePath)) {
         return null;
     }
 
-    let fileContent : string = fs.readFileSync(filePath).toString();
-    let targetSuite : TestSuite = new TestSuite(Uri.file(filePath));
+    let fileContent: string = fs.readFileSync(filePath).toString();
+    let targetSuite: TestSuite = new TestSuite(Uri.file(filePath));
     if (feedContentIntoSuite(fileContent, targetSuite)) {
         return targetSuite;
     }
@@ -27,7 +27,7 @@ export function buildFileToSuiteSync(filePath : string) : TestSuite {
     }
 }
 
-function getPopulatorThroughHeader(header : string)
+function getPopulatorThroughHeader(header: string)
 {
     if (-1 != TestSuite.keyword_table_names.indexOf(header)) {
         return KeywordTablePopulator;
@@ -46,7 +46,7 @@ function getPopulatorThroughHeader(header : string)
 /**
  * this function need Unit Test
  */
-export function buildFileToSuite(filePath : string) : Thenable<TestSuite> {
+export function buildFileToSuite(filePath: string): Thenable<TestSuite> {
     return new Promise<TestSuite>((resolve, reject) => {
         // if the file is not existed, we should not open it.  And let user know that
         fs.exists(filePath, (exists) => {
@@ -55,8 +55,8 @@ export function buildFileToSuite(filePath : string) : Thenable<TestSuite> {
                     if (err) {
                         reject("error in read file");
                     } else {
-                        let fileContent : string = data.toString();
-                        let targetSuite : TestSuite = new TestSuite(Uri.file(filePath));
+                        let fileContent: string = data.toString();
+                        let targetSuite: TestSuite = new TestSuite(Uri.file(filePath));
                         feedContentIntoSuite(fileContent, targetSuite);
                         resolve(targetSuite);
                     }
@@ -72,20 +72,20 @@ export function buildFileToSuite(filePath : string) : Thenable<TestSuite> {
  * @param suite the target suite to feed
  * @return true for feed success, false for feed failure, it may caused by the illegal header input
  */
-function feedContentIntoSuite(fileContent : string, suite : TestSuite) : boolean
+function feedContentIntoSuite(fileContent: string, suite: TestSuite): boolean
 {
     // in windows, lines is split by \r\n, but in linux, it's split by \n
     // so use a regex to match both \r, \n, \r\n
-    let lineContentList : string[] = fileContent.split(/\r?\n/);
-    let lineCount : number = lineContentList.length;
-    let currentLineNumber : number = 0;
+    let lineContentList: string[] = fileContent.split(/\r?\n/);
+    let lineCount: number = lineContentList.length;
+    let currentLineNumber: number = 0;
 
     while (currentLineNumber < lineCount) {
-        let currentLine : string = lineContentList[currentLineNumber];
+        let currentLine: string = lineContentList[currentLineNumber];
         let match = currentLine.match("\\*\\*\\*(.*)\\*\\*\\*");
 
         if (match) {
-            let header : string = match[1].trim();
+            let header: string = match[1].trim();
 
             // if the header is leagal table
             // then feed the header to target suite

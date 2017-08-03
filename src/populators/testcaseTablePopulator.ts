@@ -6,21 +6,21 @@ export class TestCaseTablePopulator {
      // feed document's test case table to suite, the content of document is begin with startLine
      // return the next line to search in the document
      // this static method need unit test
-     static populate(lineContentList : string[], startLine : number, suite : TestSuite) : number
+     static populate(lineContentList: string[], startLine: number, suite: TestSuite): number
      {
-         let currentLineNumber : number = startLine;
-         let lineCount : number = lineContentList.length;
+         let currentLineNumber: number = startLine;
+         let lineCount: number = lineContentList.length;
          let endPattern = new RegExp("\\*\\*\\*(.*)\\*\\*\\*");
          // match for the test case name
-         let testCaseNamePattern : RegExp = /^(\S+).*/i;
+         let testCaseNamePattern: RegExp = /^(\S+).*/i;
 
          while (currentLineNumber < lineCount) {
-             let currentLine : string = lineContentList[currentLineNumber];
+             let currentLine: string = lineContentList[currentLineNumber];
 
              if (currentLine.match(endPattern)) {
                  return currentLineNumber;
              } else if (currentLine.match(testCaseNamePattern)) {
-                 let tc : TestCase = new TestCase();
+                 let tc: TestCase = new TestCase();
                  currentLineNumber = TestCaseTablePopulator.populateLocalVarToTestCase(lineContentList, currentLineNumber, tc);
                  suite.testCases.push(tc);                 
              } else {
@@ -35,10 +35,10 @@ export class TestCaseTablePopulator {
      // return the next line to search in the document
      // and it should only be used by TestCaseTablePopulator.populate
      // the startLine is the first line of TestCase body(with test case name)
-     static populateLocalVarToTestCase(lineContentList : string[], startLine : number, testCase : TestCase) : number 
+     static populateLocalVarToTestCase(lineContentList: string[], startLine: number, testCase: TestCase): number 
      {
-          let currentLineNumber : number = startLine;  
-          let lineCount : number = lineContentList.length;
+          let currentLineNumber: number = startLine;  
+          let lineCount: number = lineContentList.length;
 
           testCase.startLine = currentLineNumber;
           testCase.testname = lineContentList[currentLineNumber];
@@ -56,8 +56,8 @@ export class TestCaseTablePopulator {
                  lineContentList[currentLineNumber].match(testCaseBodyPattern)) {
               let varAssignMatch = lineContentList[currentLineNumber].match(retVarPattern);
               if (varAssignMatch) {
-                  let variableName : string = varAssignMatch[2];
-                  let v : Variable = new Variable(currentLineNumber, variableName);
+                  let variableName: string = varAssignMatch[2];
+                  let v: Variable = new Variable(currentLineNumber, variableName);
                   testCase.variables.set(variableName, v);
               }
               ++currentLineNumber;

@@ -26,7 +26,7 @@ function searchSuccess() {
 
 }
 
-function searchFailed(message : string) {
+function searchFailed(message: string) {
     throw Error(message);
 }
 
@@ -34,30 +34,30 @@ function searchFailed(message : string) {
 class GotoDefinitionPerformanceTest {
     static TestGotoKeywordDefinition() {
         // get time start
-        let startTime : Date = new Date();
+        let startTime: Date = new Date();
         // invoke the function 10000 times
-        let i : number = 0;
+        let i: number = 0;
         while (i < 50000) {
             gotoKeywordDefinition(searchSuccess, searchFailed, "keyword one", testFileAbsPath("testFileForSearchFunctions.txt"));
             ++i;
         }
         // get end time
-        let endTime : Date = new Date();
+        let endTime: Date = new Date();
         console.log(endTime);
         console.log(startTime);
     }
 
     static TestGotoVariableDefinition() {
         // get time start
-        let startTime : Date = new Date();
+        let startTime: Date = new Date();
         // invoke the function 10000 times
-        let i : number = 0;
+        let i: number = 0;
         while (i < 50000) {
             gotoVariableDefinition(searchSuccess, searchFailed, "${testAttrName}", testFileAbsPath("testWithOnlyVariableTable.txt"));
             ++i;
         }
         // get end time
-        let endTime : Date = new Date();
+        let endTime: Date = new Date();
         console.log(endTime);
         console.log(startTime);        
     }

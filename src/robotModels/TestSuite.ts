@@ -14,21 +14,21 @@ export class TestSuite {
     public static keyword_table_names = ['Keyword', 'Keywords', 'User Keyword', 'User Keywords']
 
     // represent library table in suite
-    private _libraryMetaDatas : LibraryMetaData[];
+    private _libraryMetaDatas: LibraryMetaData[];
     // represent resource table in suite
     private _resourceMetaDatas: ResourceMetaData[]; 
     // represent keyword table in suite
-    private _keywords : Keyword[];
+    private _keywords: Keyword[];
     // represent variable table in suite
-    private _variables : Variable[];
+    private _variables: Variable[];
     // represent test case table in suite
     // due to it's build process, we can assume that
     // these test cases are sorted by their startLine(or endLine)
-    private _testCases : TestCase[];
+    private _testCases: TestCase[];
     // represent source filename
-    private _source : Uri;    
+    private _source: Uri;    
 
-    public constructor(sou : Uri = null) {
+    public constructor(sou: Uri = null) {
         this.libraryMetaDatas = [];
         this.resourceMetaDatas = [];
         this.keywords = [];
@@ -37,36 +37,36 @@ export class TestSuite {
         this.source = sou;
     }
 
-    get libraryMetaDatas() : LibraryMetaData[] { return this._libraryMetaDatas; }
-    set libraryMetaDatas(value : LibraryMetaData[]) { this._libraryMetaDatas = value; }
+    get libraryMetaDatas(): LibraryMetaData[] { return this._libraryMetaDatas; }
+    set libraryMetaDatas(value: LibraryMetaData[]) { this._libraryMetaDatas = value; }
 
     get resourceMetaDatas(): ResourceMetaData[] { return this._resourceMetaDatas; }
-    set resourceMetaDatas(value : ResourceMetaData[]) { this._resourceMetaDatas = value; }
+    set resourceMetaDatas(value: ResourceMetaData[]) { this._resourceMetaDatas = value; }
 
-    get keywords() : Keyword[] { return this._keywords; }
-    set keywords(value : Keyword[]) { this._keywords = value; }
+    get keywords(): Keyword[] { return this._keywords; }
+    set keywords(value: Keyword[]) { this._keywords = value; }
     
-    get variables() : Variable[] { return this._variables; }
-    set variables(value : Variable[]) { this._variables = value; }
+    get variables(): Variable[] { return this._variables; }
+    set variables(value: Variable[]) { this._variables = value; }
     
-    get testCases() : TestCase[] { return this._testCases; }
-    set testCases(value : TestCase[]) { this._testCases = value; }
+    get testCases(): TestCase[] { return this._testCases; }
+    set testCases(value: TestCase[]) { this._testCases = value; }
 
-    get source() : Uri { return this._source; }
-    set source(value : Uri) { this._source = value; }
+    get source(): Uri { return this._source; }
+    set source(value: Uri) { this._source = value; }
 
     /**
      * give specific line in the document, locate the actual test case in the suite object
      * @param cursorLine the line of document we used for locate test case index
      * @return The TestCase object to search, and if the cursor is not in a test case, then return null
      */
-    public locateToTestCase(cursorLine : number) : TestCase {
+    public locateToTestCase(cursorLine: number): TestCase {
         // no test case in the current test suite, just return null
         if (this.testCases.length == 0)
         {
             return null;
         }
-        let currentTestIndex : number = this.locateToTestCaseIndex(cursorLine);
+        let currentTestIndex: number = this.locateToTestCaseIndex(cursorLine);
         if (currentTestIndex != -1) {
             return this.testCases[currentTestIndex];
         } else {
@@ -79,18 +79,18 @@ export class TestSuite {
      * @param cursorLine the line of document we used for locate test case index
      * @return -1 if search failed, or return the index of test case we can located for
      */
-    public locateToTestCaseIndex(cursorLine : number) : number {
+    public locateToTestCaseIndex(cursorLine: number): number {
         /**
          * using binary search to search target number, if it's not in the array
          * then return an index which indicate the number to insert
          * e.g: search 6 in [1, 3, 4, 7]
          *      will return 3
          */
-        function binarySearch(sortedNumber : number[]) : number {
-            let max : number = sortedNumber.length - 1;
-            let min : number = 0;
+        function binarySearch(sortedNumber: number[]): number {
+            let max: number = sortedNumber.length - 1;
+            let min: number = 0;
             while (min <= max) {
-                let mid : number = Math.ceil((max + min) / 2);
+                let mid: number = Math.ceil((max + min) / 2);
                 if (sortedNumber[mid] == cursorLine) {
                     return mid;
                 } else if (sortedNumber[mid] > cursorLine) {
@@ -105,24 +105,24 @@ export class TestSuite {
         /**
          * return true if the cursorLine is over flow the whole testCase table
          */
-        function isCursorLineOverFlow() : boolean {
+        function isCursorLineOverFlow(): boolean {
             return cursorLine < sortedStartLine[0] ||
                    cursorLine >= startLineEndLinePair[startLineEndLinePair.length - 1][1];
         }
 
-        let sortedStartLine : number[] = this.testCases.map(function(tc : TestCase) {
+        let sortedStartLine: number[] = this.testCases.map(function(tc: TestCase) {
             return tc.startLine;
         });
-        let startLineEndLinePair : number[][] = this.testCases.map(function(tc : TestCase) {
+        let startLineEndLinePair: number[][] = this.testCases.map(function(tc: TestCase) {
             return [tc.startLine, tc.endLine];
         });
 
         if (isCursorLineOverFlow()) {
             return -1;
         } else {
-            let resultIndex : number = binarySearch(sortedStartLine) - 1;
-            let startLine : number = startLineEndLinePair[resultIndex][0];
-            let endLine : number = startLineEndLinePair[resultIndex][1];
+            let resultIndex: number = binarySearch(sortedStartLine) - 1;
+            let startLine: number = startLineEndLinePair[resultIndex][0];
+            let endLine: number = startLineEndLinePair[resultIndex][1];
             if (cursorLine >= startLine && cursorLine < endLine) {
                 return resultIndex;
             } else {

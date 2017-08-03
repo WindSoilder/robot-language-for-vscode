@@ -1,12 +1,12 @@
 import {TestSuite} from '../../src/robotModels/TestSuite';
-import {buildFileToSuite} from '../../src/parsers/testCaseFileParser';
+import {buildFileToSuiteSync} from '../../src/parsers/testCaseFileParser';
 import * as path from 'path';
 
 export function getSuiteFromFileName(fileName : string) : TestSuite {
      // build suite from giving file name, assume the base path of filename is 
      // the file's base directory
      let filePath = testFileAbsPath(fileName);
-     return buildFileToSuite(filePath);
+     return buildFileToSuiteSync(filePath);
 }
 
 export function testFileAbsPath(fileName : string) : string {

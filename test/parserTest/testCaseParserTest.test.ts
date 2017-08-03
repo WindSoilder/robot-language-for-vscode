@@ -4,7 +4,7 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 import * as path from 'path';
 
-import {buildFileToSuite} from '../../src/parsers/testCaseFileParser';
+import {buildFileToSuiteSync} from '../../src/parsers/testCaseFileParser';
 import {TestSuite} from '../../src/robotModels/TestSuite';
 import {Keyword} from '../../src/robotModels/Keyword';
 import {TestCase} from '../../src/robotModels/TestCase';

@@ -5,7 +5,7 @@ import {TestSuite} from '../robotModels/TestSuite';
 import {Keyword} from '../robotModels/Keyword';
 import {TestCase} from '../robotModels/TestCase';
 import {Variable} from '../robotModels/Variable';
-import {buildFileToSuite} from './testCaseFileParser';
+import {buildFileToSuiteSync} from './testCaseFileParser';
 
 // these two set are use for get rid of infinite library or resource search
 // Save all libraries absoluted path that we have visited
@@ -108,7 +108,7 @@ export function searchInResourceTable(targetKeyword : string, sourceSuite : Test
             continue;
         }
 
-        let suite : TestSuite = buildFileToSuite(targetPath);
+        let suite : TestSuite = buildFileToSuiteSync(targetPath);
 
         if (null == suite) {
             continue;   // continue to next suite
@@ -174,7 +174,7 @@ export function searchVarInResourceTable(targetVariable : string, sourceSuite : 
             continue;
         }
 
-        let suite : TestSuite = buildFileToSuite(targetPath);
+        let suite : TestSuite = buildFileToSuiteSync(targetPath);
 
         if (null == suite) {
             continue;   // continue to next suite

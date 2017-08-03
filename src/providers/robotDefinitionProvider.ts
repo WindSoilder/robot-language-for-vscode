@@ -1,5 +1,5 @@
 import {DefinitionProvider, TextDocument, Position, CancellationToken, Location, Uri, commands} from 'vscode';
-import {buildFileToSuite} from '../parsers/testCaseFileParser';
+import {buildFileToSuiteSync} from '../parsers/testCaseFileParser';
 import {TestSuite} from '../robotModels/TestSuite';
 import {searchInKeywordTable, searchInLibraryTable, searchInResourceTable, initializeVisitedSet,
     initializeVarVisitedSet, searchVarInVariableTable, searchVarInResourceTable, searchVarInLocalTestCase} from '../parsers/searchFunctions';
@@ -118,7 +118,7 @@ export function gotoVariableDefinition(resolve, reject, targetVariable : string,
     }
     
     // build document to a suite
-    let suite : TestSuite = buildFileToSuite(filePath);
+    let suite : TestSuite = buildFileToSuiteSync(filePath);
     if (null == suite) {
         reject(`the file ${filePath} is not existed`);
     }
@@ -163,7 +163,7 @@ export function gotoKeywordDefinition(resolve, reject, targetKeyword : string, f
     }
     
     //  build document to a suite (complete)
-    let suite: TestSuite = buildFileToSuite(filePath);
+    let suite: TestSuite = buildFileToSuiteSync(filePath);
     if (null == suite) {
         reject(`the file ${filePath} is not existed`);
     }

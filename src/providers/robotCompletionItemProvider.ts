@@ -8,11 +8,9 @@ import {
 import { buildFileToSuite, buildFileToSuiteSync } from '../parsers/testCaseFileParser';
 import { TestSuite } from '../robotModels/TestSuite';
 import { Searchable } from '../robotModels/Searchable';
-/*
-import { FunctionItemFeeder } from '../itemFeeders/functionItemFeeder';
-import { KeywordItemFeeder } from '../itemFeeders/keywordItemFeeder';
-import { VariableItemFeeder } from '../itemFeeders/variableItemFeeder';
-*/
+import { NonVariableFeeder } from '../itemFeeders/nonVariableFeeder';
+import { VariableFeeder } from '../itemFeeders/variableFeeder';
+import {} from '../utils';
 
 export class RobotCompletionItemProvider implements CompletionItemProvider {
     /**
@@ -26,15 +24,44 @@ export class RobotCompletionItemProvider implements CompletionItemProvider {
         return new Promise<CompletionItem[]>((resolve, reject) => {
             buildFileToSuite(document.uri.fsPath).then((testSuite) => {
                 let resultCompletionItem: CompletionItem[] = new Array<CompletionItem>();
-/*
-                if (this.shouldProvideVariable()) {
-                    this.feedVariableItems(testSuite, resultCompletionItem, position.line);
+
+                if (this.shouldProvideVariable(document, position)) {
+                    this.feedVariableItems(testSuite, position.line, resultCompletionItem);
                 } else {
-                    this.feedKeywordAndFunctionItems(testSuite, resultCompletionItem);
+                    this.feedNonVariableItems(testSuite, resultCompletionItem);
                 }
-                */
+
                 resolve(resultCompletionItem);
             });
         });
+    }
+
+    /**
+     * judge for if we should provide variable or others
+     */
+    private shouldProvideVariable(document: TextDocument, position: Position): boolean {
+        let currentLine: string = document.lineAt(position.line).text;
+        let column = position.character - 1;
+        return column != 0 &&
+               currentLine[column - 1] == '{';
+    }
+
+    /**
+     * feed variables in suite into items
+     * @param suite the source of TestSuite to provide
+     * @param line the line number in the document, it can used to indicate whether we need local variable
+     * @param items result items to feed
+     */
+    private feedVariableItems(suite: TestSuite, line: number, items: CompletionItem[]): void {
+        VariableFeeder.feedItems(suite, line, items);
+    }
+
+    /**
+     * feed robot keyword and function into items
+     * @param suite the source of TestSuite to provide
+     * @param items result items to feed
+     */
+    private feedNonVariableItems(suite: TestSuite, items: CompletionItem[]): void {
+        NonVariableFeeder.feedItems(suite, items);
     }
 }

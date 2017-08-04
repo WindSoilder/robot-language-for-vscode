@@ -12,6 +12,9 @@ export class VariableTableFeeder implements TableFeeder
     feedItems(suite: TestSuite, items: CompletionItem[]): void
     {
         for (let variable of suite.variables) {
+            // beacuase the provider is only ask when
+            // user typing a word, and special characters will be removed
+            // so remove the special character in variable name
             let variableName = variable.name.replace(/\$\{|\&\{|\@\{/, "").replace("}", "");
 
             items.push(new CompletionItem(variableName, CompletionItemKind.Variable));

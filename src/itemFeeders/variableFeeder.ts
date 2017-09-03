@@ -17,10 +17,27 @@ export class VariableFeeder
     /**
      * feed all reachable variable to items
      */
-    public static feedItems(suite: TestSuite, line: number, items: CompletionItem[]): void {
+    public static feedItems(suite: TestSuite, line: number, items: CompletionItem[]): Thenable<void>
+    {
+        let promiseList: Thenable<void>[] = [];
+        this.generatePromiseList(promiseList, suite, line, items);
+
+        return new Promise<void>((resolve, reject) => {
+            Promise.all(promiseList).
+            then(() => {
+                resolve();
+            });
+        });
+    }
+
+    private static generatePromiseList(promiseList: Thenable<void>[],
+                                       suite: TestSuite,
+                                       line: number,
+                                       items: CompletionItem[]): void
+    {
         for (let feeder of this.tableFeeders) {
-            feeder.feedItems(suite, items);
+            promiseList.push(feeder.feedItems(suite, items));
         }
-        this.localVarFeeder.feedItems(suite, line, items);
+        promiseList.push(this.localVarFeeder.feedItems(suite, line, items));
     }
 }

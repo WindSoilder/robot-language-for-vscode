@@ -9,8 +9,10 @@ export class LibraryMetaTableFeeder implements TableFeeder
     /**
      * feed library metadata in suite into items
      */
-    feedItems(suite: TestSuite, items: CompletionItem[]): void
+    feedItems(suite: TestSuite, items: CompletionItem[]): Thenable<void>
     {
-
+        return new Promise<void>((resolve, reject) => {
+            resolve();
+        });
     }
 }

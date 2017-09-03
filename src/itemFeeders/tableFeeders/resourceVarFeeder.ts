@@ -8,7 +8,9 @@ import { TableFeeder } from './tableFeeder';
  */
 export class ResourceVarFeeder implements TableFeeder
 {
-    feedItems(suite: TestSuite, items: CompletionItem[]): void {
-
+    feedItems(suite: TestSuite, items: CompletionItem[]): Thenable<void> {
+        return new Promise<void>((resolve, reject) => {
+            resolve();
+        });
     }
 }

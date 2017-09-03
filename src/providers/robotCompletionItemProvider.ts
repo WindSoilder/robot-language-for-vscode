@@ -26,12 +26,16 @@ export class RobotCompletionItemProvider implements CompletionItemProvider {
                 let resultCompletionItem: CompletionItem[] = new Array<CompletionItem>();
 
                 if (this.shouldProvideVariable(document, position)) {
-                    this.feedVariableItems(testSuite, position.line, resultCompletionItem);
+                    this.feedVariableItems(testSuite, position.line, resultCompletionItem)
+                    .then(() => {
+                        resolve(resultCompletionItem);
+                    });
                 } else {
-                    this.feedNonVariableItems(testSuite, resultCompletionItem);
+                    this.feedNonVariableItems(testSuite, resultCompletionItem)
+                    .then(() => {
+                        resolve(resultCompletionItem);
+                    });
                 }
-
-                resolve(resultCompletionItem);
             });
         });
     }
@@ -52,8 +56,9 @@ export class RobotCompletionItemProvider implements CompletionItemProvider {
      * @param line the line number in the document, it can used to indicate whether we need local variable
      * @param items result items to feed
      */
-    private feedVariableItems(suite: TestSuite, line: number, items: CompletionItem[]): void {
-        VariableFeeder.feedItems(suite, line, items);
+    private feedVariableItems(suite: TestSuite, line: number, items: CompletionItem[]): Thenable<void>
+    {
+        return VariableFeeder.feedItems(suite, line, items);
     }
 
     /**
@@ -61,7 +66,7 @@ export class RobotCompletionItemProvider implements CompletionItemProvider {
      * @param suite the source of TestSuite to provide
      * @param items result items to feed
      */
-    private feedNonVariableItems(suite: TestSuite, items: CompletionItem[]): void {
-        NonVariableFeeder.feedItems(suite, items);
+    private feedNonVariableItems(suite: TestSuite, items: CompletionItem[]): Thenable<void> {
+        return NonVariableFeeder.feedItems(suite, items);
     }
 }

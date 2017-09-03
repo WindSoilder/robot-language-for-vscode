@@ -8,8 +8,10 @@ export class LocalVariableFeeder
     /**
      * feed variable table in suite into items
      */
-    feedItems(suite: TestSuite, line: number, items: CompletionItem[]): void
+    feedItems(suite: TestSuite, line: number, items: CompletionItem[]): Thenable<void>
     {
+        return new Promise<void>((resolve, reject) => {
 
+        });
     }
 }

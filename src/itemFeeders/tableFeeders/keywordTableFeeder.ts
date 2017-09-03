@@ -9,10 +9,13 @@ export class KeywordTableFeeder implements TableFeeder
     /**
      * feed keyword table in suite to items
      */
-    feedItems(suite: TestSuite, items: CompletionItem[]): void
+    feedItems(suite: TestSuite, items: CompletionItem[]): Thenable<void>
     {
-        for (let keyword of suite.keywords) {
-            items.push(new CompletionItem(keyword.name, CompletionItemKind.Function));
-        }
+        return new Promise<void>((resolve, reject) => {
+            for (let keyword of suite.keywords) {
+                items.push(new CompletionItem(keyword.name, CompletionItemKind.Function));
+            }
+            resolve();
+        });
     }
 }

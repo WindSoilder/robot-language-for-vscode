@@ -1,16 +1,14 @@
 import { CompletionItem } from 'vscode';
 
-import { TestSuite } from '../../robotModels/TestSuite';
-import { TableFeeder } from './tableFeeder';
+import {VariableTableFeeder} from './variableTableFeeder';
+import {ResourceFeeder} from './resourceFeeder';
 
 /**
  * feed variable which defined in suite's resource table
  */
-export class ResourceVarFeeder implements TableFeeder
+export class ResourceVarFeeder extends ResourceFeeder
 {
-    feedItems(suite: TestSuite, items: CompletionItem[]): Thenable<void> {
-        return new Promise<void>((resolve, reject) => {
-            resolve();
-        });
+    constructor() {
+        super(new VariableTableFeeder());
     }
 }

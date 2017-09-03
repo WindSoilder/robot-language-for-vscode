@@ -11,7 +11,7 @@ export class LocalVariableFeeder
     feedItems(suite: TestSuite, line: number, items: CompletionItem[]): Thenable<void>
     {
         return new Promise<void>((resolve, reject) => {
-
+            resolve();
         });
     }
 }

@@ -6,6 +6,7 @@
 - Find All References to a Symbol
 - Show all symbol definitions within a document
 - Format plain text in an editor
+- Don't need to set site-package path in os env, instead of set site-package path in vscode env
 
 ## 0.2.8 - 2017-08-02
 ### Added

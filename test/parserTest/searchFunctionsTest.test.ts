@@ -13,7 +13,7 @@ import {getSuiteFromFileName, testFileAbsPath} from './parserUtil';
 
 // note that this extension don't care about test case table and variable table in suite.
 suite("search functions tests", () => {
-    let testFileName: string = "testFileForSearchFunctions.txt";
+    let testFileName: string = "testFileForSearchFunctions.robot";
     let suite: TestSuite = getSuiteFromFileName(testFileName);
     
     function assertLocationEqual(actual: Location, expect: Location, funcName: string) {
@@ -77,7 +77,7 @@ suite("search functions tests", () => {
 
     test("searchInResourceTable function test", () => {
         let testKeywordName: string = "keyword five";
-        let expectResourceUri: Uri = Uri.file(testFileAbsPath("testFileForSearchFunctionsResource.txt"));
+        let expectResourceUri: Uri = Uri.file(testFileAbsPath("testFileForSearchFunctionsResource.robot"));
         let expectLocation: Location = 
             new Location(expectResourceUri, new Position(1, 0));
         
@@ -91,13 +91,13 @@ suite("search functions tests", () => {
         let testVarNames: string[] = [
             "${testVar1}", "${test Var 2}", "@{listVar}"
         ];
-        let expectResourceUri: Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctions.txt"));
+        let expectResourceUri: Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctions.robot"));
         let expectLocations: Location[] = [
             new Location(expectResourceUri, new Position(8, 0)),
             new Location(expectResourceUri, new Position(9, 0)),
             new Location(expectResourceUri, new Position(10, 0))
         ];
-        let suite: TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
+        let suite: TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.robot");
         
         for (let index in testVarNames) {
             let loc: Location = searchVarInVariableTable(testVarNames[index], suite);
@@ -109,13 +109,13 @@ suite("search functions tests", () => {
         let testVarNames: string[] = [
             "${testVar3}", "${test Var 4}", "&{dictVar}"
         ];
-        let expectResourceUri: Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctionsResource.txt"));
+        let expectResourceUri: Uri = Uri.file(testFileAbsPath("testFileForVarSearchFunctionsResource.robot"));
         let expectLocations: Location[] = [
             new Location(expectResourceUri, new Position(1, 0)),
             new Location(expectResourceUri, new Position(2, 0)),
             new Location(expectResourceUri, new Position(3, 0))
         ]
-        let suite: TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.txt");
+        let suite: TestSuite = getSuiteFromFileName("testFileForVarSearchFunctions.robot");
 
         for (let index in testVarNames) {
             initializeVarVisitedSet();
@@ -136,7 +136,7 @@ suite("search functions tests", () => {
             8, 9,
             13
         ];
-        let expectResourceUri: Uri = Uri.file(testFileAbsPath("testLocalVariable.txt"));
+        let expectResourceUri: Uri = Uri.file(testFileAbsPath("testLocalVariable.robot"));
         let expectLocations: Location[] = [
             new Location(expectResourceUri, new Position(3, 0)),
             new Location(expectResourceUri, new Position(6, 0)),
@@ -144,7 +144,7 @@ suite("search functions tests", () => {
             new Location(expectResourceUri, new Position(12, 0))
         ];
 
-        let suite: TestSuite = getSuiteFromFileName("testLocalVariable.txt");
+        let suite: TestSuite = getSuiteFromFileName("testLocalVariable.robot");
 
         for (let index in testVarNames) {
             let loc: Location = searchVarInLocalTestCase(testVarNames[index], suite, testCursorLine[index]);

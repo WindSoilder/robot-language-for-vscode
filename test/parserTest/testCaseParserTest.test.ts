@@ -50,7 +50,7 @@ suite("File Builder Test", () => {
     }
 
     test("test build file with all tables", () => {
-        let fileName: string = "testWithAllTables.txt";
+        let fileName: string = "testWithAllTables.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableExisted(suite);
@@ -59,7 +59,7 @@ suite("File Builder Test", () => {
     });
 
     test("test build file with only setting table", () => {
-        let fileName: string = "testWithOnlySettingTable.txt";
+        let fileName: string = "testWithOnlySettingTable.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
         
         assertKeywordTableNotExisted(suite);
@@ -67,7 +67,7 @@ suite("File Builder Test", () => {
     });
 
     test("test build file with only keyword table", () => {
-        let fileName: string = "testWithOnlyKeywordTable.txt";
+        let fileName: string = "testWithOnlyKeywordTable.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableExisted(suite);
@@ -75,7 +75,7 @@ suite("File Builder Test", () => {
     });
 
     test("test build file with setting and testcase table", () => {
-        let fileName: string = "testWithSettingAndTestCaseTable.txt";
+        let fileName: string = "testWithSettingAndTestCaseTable.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableNotExisted(suite);
@@ -83,7 +83,7 @@ suite("File Builder Test", () => {
     });
 
     test("test build file with setting and keyword table", () => {
-        let fileName: string = "testWithSettingAndKeywordTable.txt";
+        let fileName: string = "testWithSettingAndKeywordTable.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableExisted(suite);
@@ -91,7 +91,7 @@ suite("File Builder Test", () => {
     });
 
     test("test build file with testcase and keyword table", () => {
-        let fileName: string = "testWithTestCaseAndKeywordTable.txt";
+        let fileName: string = "testWithTestCaseAndKeywordTable.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableExisted(suite);
@@ -99,7 +99,7 @@ suite("File Builder Test", () => {
     });
 
     test("test build file with empty file", () => {
-        let fileName: string = "testWithEmptyFile.txt";
+        let fileName: string = "testWithEmptyFile.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertKeywordTableNotExisted(suite);
@@ -107,21 +107,21 @@ suite("File Builder Test", () => {
     });
 
     test("test build file with illegal syntax", () => {
-        let fileName: string = "testWithIllegalSyntax.txt";
+        let fileName: string = "testWithIllegalSyntax.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assert.equal(suite, null, "build suite with illegal syntax should return null");
     });
 
     test("test build file with variable table", () => {
-        let fileName: string = "testWithOnlyVariableTable.txt";
+        let fileName: string = "testWithOnlyVariableTable.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
 
         assertVarTableExisted(suite);
     });
 
     test("test TestCase local variable assignment", () => {
-        let fileName: string = "testLocalVariable.txt";
+        let fileName: string = "testLocalVariable.robot";
         let suite: TestSuite = getSuiteFromFileName(fileName);
 
         let caseNumber: number = 4;

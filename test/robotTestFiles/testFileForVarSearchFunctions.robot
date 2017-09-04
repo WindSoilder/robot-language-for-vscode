@@ -3,7 +3,7 @@ Keyword1
     test function 1    ${testVar1}    ${test Var 2}    ${testVar3}    ${test Var 4}    @{listVar}    &{dictVar}
 
 *** Settings ***
-resource    testFileForVarSearchFunctionsResource.txt
+resource    testFileForVarSearchFunctionsResource.robot
 
 *** Variables ***
 ${testVar1}    varValue1

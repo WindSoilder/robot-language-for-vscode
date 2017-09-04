@@ -19,4 +19,4 @@ case4
 library    test.py
 
 *** Variables ***
-${wasSetInVarTable}    70
+${wasSetIsnVarTable}    70

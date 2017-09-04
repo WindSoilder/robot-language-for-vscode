@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import {Location, Position, Uri, TextDocument} from 'vscode';
+import {getResourcePath} from '../parsers/util';
 import {TestSuite} from '../robotModels/TestSuite';
 import {Keyword} from '../robotModels/Keyword';
 import {TestCase} from '../robotModels/TestCase';
@@ -95,12 +96,8 @@ export function searchInResourceTable(targetKeyword: string, sourceSuite: TestSu
     // the filePath need to be compatible with different systems :(
 
     for (let resource of sourceSuite.resourceMetaDatas) {
-        let targetPath: string = null;
-        if (path.isAbsolute(resource.dataValue)) {
-            targetPath = resource.dataValue;
-        } else {
-            targetPath = path.join(currentPath, resource.dataValue);
-        }
+        let targetPath: string = getResourcePath(resource.dataValue,
+                                                 currentPath);
 
         console.log("in for loop in search in resource table:" + targetPath);
 
@@ -168,7 +165,8 @@ export function searchVarInResourceTable(targetVariable: string, sourceSuite: Te
 
     // the filePath need to be compatible with different systems :(
     for (let resource of sourceSuite.resourceMetaDatas) {
-        let targetPath = path.join(currentPath, resource.dataValue);
+        let targetPath = getResourcePath(resource.dataValue,
+                                         currentPath);
 
         if (varVisitedResourceSet.has(targetPath)) {
             continue;

@@ -36,7 +36,7 @@ export class LibraryMetaData extends MetaData {
  * ResourceMetaData represent resources in a test suite
  * it appears like this:
  * *** Settings ***
- * Resource    test_resource.txt
+ * Resource    test_resource.robot
  */
 export class ResourceMetaData extends MetaData {
 }

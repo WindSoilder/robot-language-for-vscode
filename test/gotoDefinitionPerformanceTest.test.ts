@@ -38,7 +38,7 @@ class GotoDefinitionPerformanceTest {
         // invoke the function 10000 times
         let i: number = 0;
         while (i < 50000) {
-            gotoKeywordDefinition(searchSuccess, searchFailed, "keyword one", testFileAbsPath("testFileForSearchFunctions.txt"));
+            gotoKeywordDefinition(searchSuccess, searchFailed, "keyword one", testFileAbsPath("testFileForSearchFunctions.robot"));
             ++i;
         }
         // get end time
@@ -53,7 +53,7 @@ class GotoDefinitionPerformanceTest {
         // invoke the function 10000 times
         let i: number = 0;
         while (i < 50000) {
-            gotoVariableDefinition(searchSuccess, searchFailed, "${testAttrName}", testFileAbsPath("testWithOnlyVariableTable.txt"));
+            gotoVariableDefinition(searchSuccess, searchFailed, "${testAttrName}", testFileAbsPath("testWithOnlyVariableTable.robot"));
             ++i;
         }
         // get end time

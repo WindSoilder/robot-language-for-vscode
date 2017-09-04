@@ -10,7 +10,6 @@ import { TestSuite } from '../robotModels/TestSuite';
 import { Searchable } from '../robotModels/Searchable';
 import { NonVariableFeeder } from '../itemFeeders/nonVariableFeeder';
 import { VariableFeeder } from '../itemFeeders/variableFeeder';
-import {} from '../utils';
 
 export class RobotCompletionItemProvider implements CompletionItemProvider {
     /**

@@ -22,4 +22,4 @@ keyword four
 library    test.py
 library    testWithClass.TestLibraryClass
 library    anotherTest
-resource    testFileForSearchFunctionsResource.txt
+resource    testFileForSearchFunctionsResource.robot

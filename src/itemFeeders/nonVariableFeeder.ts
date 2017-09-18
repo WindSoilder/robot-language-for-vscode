@@ -18,7 +18,6 @@ export class NonVariableFeeder
      * feed all reachable non-variable to items
      */
     public static feedItems(suite: TestSuite, items: CompletionItem[]): Thenable<void> {
-        //return new ResourceKeywordFeeder().feedItems(suite, items);
         let promiseList: Thenable<void>[] = [];
         this.generatePromiseList(promiseList, suite, items);
 

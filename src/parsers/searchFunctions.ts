@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import {Location, Position, Uri, TextDocument} from 'vscode';
-import {getResourcePath} from '../parsers/util';
+import {getResourcePath, getLibraryFullPathSync} from './util';
 import {TestSuite} from '../robotModels/TestSuite';
 import {Keyword} from '../robotModels/Keyword';
 import {TestCase} from '../robotModels/TestCase';
@@ -53,7 +53,7 @@ export function searchInLibraryTable(targetKeyword: string, suite: TestSuite): L
     // we will first search the library file in the file's current directory
     // and then search in site package directory
     for (let modulePath of suite.libraryMetaDatas) {   
-        let libraryFullPath: string = getLibraryFullPath(modulePath.dataValue, suite);
+        let libraryFullPath: string = getLibraryFullPathSync(modulePath.dataValue, suite);
 
         // if the library is robot builtin, we can't catch it from file
         // and we will return continue to search next
@@ -188,89 +188,6 @@ export function searchVarInResourceTable(targetVariable: string, sourceSuite: Te
             if (location) return location;
         }
     } // end for (let resource of suite.resourceMetaDatas)
-}
-
-/**
- * get the library full path according to library meta data
- * if the library is not existed, return null
- */
-function getLibraryFullPath(modulePath: string, suite: TestSuite): string {
-    // this function will get file from base dir, site package path and check if they are existed
-    let getPathFunctions: Function[] = [
-        getLibraryFullPathInCurrentDir,
-        getLibraryFullPathInCurrentDirWithClassName,
-        getLibraryFullPathInSiteDir,
-        getLibraryFullPathInSiteDirWithClassName 
-    ];
-
-    
-    for (let getPathFunction of getPathFunctions) {
-        let libraryPath: string = getPathFunction(modulePath, suite);
-        console.log(`search in ${libraryPath}`);
-        if (fs.existsSync(libraryPath)) {
-            return libraryPath;
-        }
-    }
-    return null;
-}
-
-/*
- * return full path base on the suite's current directory
- * it doesn't check if the file existed
- */
-function getLibraryFullPathInCurrentDir(modulePath: string, suite: TestSuite): string {
-   let libraryRootPath: string = path.dirname(suite.source.fsPath);
-
-   // use for this scenario:
-   // library    ../../testLibrary/testmodule.py
-   // for this one, we should join from module path to root path earily, and change modulePath to emptystring
-   if (modulePath.startsWith('.')) {
-       console.log(`library root path: ${libraryRootPath}`);
-       console.log(`base name of library root path: ${libraryRootPath}`);
-       console.log(`module path: ${modulePath}`);
-       libraryRootPath = path.join(libraryRootPath, modulePath);
-       console.log(`after library root path: ${libraryRootPath}`);
-       modulePath = '';
-   }
-   return getLibraryFullPathForGivenRoot(libraryRootPath, modulePath);
-}
-
-function getLibraryFullPathInCurrentDirWithClassName(modulePath: string, suite: TestSuite): string {
-   // this function is work for this scenario
-   // library    dell.automation.modulename.classname
-   // for this scenario, we should return dell/automation/modulename.py 
-   // rather than return dell/automation/modulename/classname.py
-   let actualModulePathList: string[] = modulePath.split('.').slice(0, -1);
-   let actualModulePath: string = actualModulePathList.join('.'); 
-   
-   return getLibraryFullPathInCurrentDir(actualModulePath, suite);
-}
-
-function getLibraryFullPathInSiteDirWithClassName(modulePath: string, suite: TestSuite): string {
-   let actualModulePathList: string[] = modulePath.split('.').slice(0, -1);
-   let actualModulePath: string = actualModulePathList.join('.');
-
-   return getLibraryFullPathInSiteDir(actualModulePath, suite);
-}
-/*
- * return full path base on python site package directory
- * it doesn't check if the file existed
- */
-function getLibraryFullPathInSiteDir(modulePath: string, suite: TestSuite): string {
-   let libraryRootPath: string = process.env.PY_SITE_PATH;
-   return getLibraryFullPathForGivenRoot(libraryRootPath, modulePath);
-}
-
-function getLibraryFullPathForGivenRoot(rootPath: string, modulePath: string): string {
-    const PYTHON_EXT_NAME = ".py";
-
-    // use for this issue
-    // library    dell.automation.ca_common.test.py
-    let libraryPath: string = modulePath.replace(/\.py/, '');
-    libraryPath = libraryPath.replace(/\./g, path.sep);
-    let sitePackageFullPath: string = path.join(rootPath, libraryPath) + PYTHON_EXT_NAME;
-
-    return sitePackageFullPath;
 }
 
 export function initializeVisitedSet() {

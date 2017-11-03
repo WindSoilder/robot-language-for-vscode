@@ -31,3 +31,7 @@ Support variable scrope analyze
 
 ### 0.2.8
 Fix error file suffix support format, for now support .robot file but not .txt file
+
+```
+test code
+```
